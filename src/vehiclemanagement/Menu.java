@@ -25,8 +25,12 @@ public class Menu {
         for (int i = 0; i < L; i++) {
             System.out.println((i + 1) + "-" + options[i]);
         }
-        System.out.print("Choose (1.." + L + "): ");
-        return Integer.parseInt(Utilities.sc.nextLine());
+
+        // Precheck the input option as the integer 
+        return Integer.parseInt(Utilities.readString("Choose (1.." + L + ")(Other Numbers to exit program)",
+                                                     new String[]{Constants.INVALID_MSG("Option")},
+                                                     "^\\d+$",
+                                                     false));
     }
 
     /** Get the option by Numeric type from the user

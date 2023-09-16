@@ -48,7 +48,7 @@ public class VehicleList extends ArrayList<Vehicle> {
      * <br>Ask user to continue
      */
     public void addVehicle() {
-        String name, color, brand, type, id = null;
+        String name, color, brand, type, id;
         double price;
         Date productDate;
         boolean isExisted = false;
@@ -139,25 +139,50 @@ public class VehicleList extends ArrayList<Vehicle> {
 
         // Adding new vehicle to the list
         Vehicle newVehicle = new Vehicle(id, name, color, price, brand, type, productDate);
-        System.out.println(newVehicle);
-        this.add(newVehicle);
 
-        // Ask user to continue adding to the list
-        Menu.continueOption(new IContinueOption() {
-            @Override
-            public void apply() {
-                addVehicle();
-            }
-        }, "Do you want to continue adding new vehicle (Y/N).");
+        // Print out message if add failed
+        if (this.add(newVehicle)) {
+            System.out.println("Added successfully. New vehicle: " + newVehicle.toString());
+        } else {
+            System.out.println("Added failed. Please try again.");
+        }
     }
 
-    /** Check the existance of the Vehicle based on Id
+    /** Check the existance of the Vehicle based on ID
      *
      * @param vehicle: a passed vehicle to the function
      * @return true or false depends on the existance of the vehicle
      */
     public boolean checkExist(Vehicle vehicle) {
         return this.contains(vehicle);
+    }
+
+    /** Check to see if the Vehicle'ID exist in the list or not
+     *
+     */
+    public void checkExistOnId() {
+        String id = "";
+
+        // Input id and precheck its pattern
+        do {
+            id = Utilities.readString("Enter Vehicle's ID",
+                                      new String[]{Constants.INVALID_MSG("Vehicle's Id"),
+                                                   Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Id",
+                                                                                    "VH****** (* is from 0 - 9)",
+                                                                                    "Cannot be null",
+                                                                                    "No special characters")
+                                      },
+                                      "^VH\\d{6}$",
+                                      false);
+        } while (id.isEmpty());
+
+        // Check if the passed id is on the list or not
+        Vehicle vehicle = new Vehicle(id);
+        if (checkExist(vehicle)) {
+            System.out.println("The vehicle " + id + " is on the list.");
+        } else {
+            System.out.println("Not found " + id);
+        }
     }
 
     /** Display Vehicles from the list
