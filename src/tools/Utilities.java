@@ -182,10 +182,12 @@ public abstract class Utilities {
      * <br>Available Date format: dd-MM-yyyy, yyyy-MM-dd,
      *
      * @param prompt: will be printted before inputting
+     * @param invalidMsgs: output messages to console incase of invalid input
      * @param dateFormat: input a date format
      * @return a date object based on the input string
      */
     public static Date readDate(String prompt,
+                                String[] invalidMsgs,
                                 String dateFormat) {
         Date date = null;
         String inputStr;
@@ -196,9 +198,11 @@ public abstract class Utilities {
             // Assign the date object created from the parsing function 
             date = parseDateFromString(inputStr, dateFormat);
 
-            // Print the message to notice user the wrong input
-            if (date == null) {
-                System.out.println(Constants.INVALID_MSG("Date"));
+            // Output the msg if the date is valid
+            if (date == null && invalidMsgs.length > 0) {
+                for (String message : invalidMsgs) {
+                    System.out.println(message);
+                }
             }
         } while (date == null);
 
@@ -209,11 +213,13 @@ public abstract class Utilities {
      *
      *
      * @param prompt: prompting the date to return
+     * @param invalidMsgs: output messages to console incase of invalid input
      * @param dateFormat: date format
      * @param markerDate: the given date
      * @return the date before the given date
      */
     public static Date readDateBefore(String prompt,
+                                      String[] invalidMsgs,
                                       String dateFormat,
                                       Date markerDate) {
         Date dateBefore = null;
@@ -228,8 +234,10 @@ public abstract class Utilities {
             isValidDateBefore = (dateBefore != null) && dateBefore.before(markerDate);
 
             // Output the msg if the date is valid
-            if (!isValidDateBefore) {
-                System.out.println(Constants.INVALID_MSG("Before Date"));
+            if (!isValidDateBefore && invalidMsgs.length > 0) {
+                for (String message : invalidMsgs) {
+                    System.out.println(message);
+                }
             }
         } while (!isValidDateBefore);
 
@@ -239,11 +247,13 @@ public abstract class Utilities {
     /** Read Date after the given date
      *
      * @param prompt: prompting the date to return
+     * @param invalidMsgs: output messages to console incase of invalid input
      * @param dateFormat: date format
      * @param markerDate: the given date
      * @return the date after the given date
      */
     public static Date readDateAfter(String prompt,
+                                     String[] invalidMsgs,
                                      String dateFormat,
                                      Date markerDate) {
         Date dateAfter = null;
@@ -255,11 +265,13 @@ public abstract class Utilities {
             System.out.print("\n" + prompt + ": ");
             inputStr = sc.nextLine().trim();
             dateAfter = parseDateFromString(inputStr, dateFormat);
-            isValidDateAfter = (dateAfter != null) && dateAfter.after(markerDate);
 
-            // Output the msg if the date is valid
-            if (!isValidDateAfter) {
-                System.out.println(Constants.INVALID_MSG("After Date"));
+            // Print notice msg if not matching the pattern and having invalid messages   
+            isValidDateAfter = (dateAfter != null) && dateAfter.after(markerDate);
+            if (!isValidDateAfter && invalidMsgs.length > 0) {
+                for (String message : invalidMsgs) {
+                    System.out.println(message);
+                }
             }
         } while (!isValidDateAfter);
 
@@ -272,19 +284,26 @@ public abstract class Utilities {
     /** Read a String using the pre-define pattern
      *
      * @param prompt: prompting user msg
-     * @param invalidMsgs:invalid msgs for specific input type
+     * @param invalidMsgs:invalid messages for specific input type
      * @param strFormat: regular expression to match the string format
-     * @return
+     * @param isSkippable: determine if the user skip the input and return null to set a default value
+     * @return the date before the given date
      */
     public static String readString(String prompt,
                                     String[] invalidMsgs,
-                                    String strFormat) {
+                                    String strFormat,
+                                    boolean isSkippable) {
 
-        String inputStr;
+        String inputStr = "";
         boolean isMatched = false;
         do {
             System.out.print("\n" + prompt + ": ");
             inputStr = sc.nextLine().trim();
+
+            // Return null if the string is empty to set default value
+            if (inputStr.isEmpty() && isSkippable) {
+                break;
+            }
 
             // Comparing the input and the pattern
             isMatched = inputStr.matches(strFormat);

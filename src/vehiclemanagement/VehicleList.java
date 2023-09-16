@@ -4,8 +4,10 @@
  */
 package vehiclemanagement;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Scanner;
 import tools.Constants;
 import tools.Utilities;
@@ -17,7 +19,7 @@ import tools.Utilities;
 public class VehicleList extends ArrayList<Vehicle> {
 
     // Reading Scanner from Keyboard
-    private static Scanner sc;
+    private static final Scanner sc;
 
     static {
         sc = new Scanner(System.in);
@@ -32,21 +34,23 @@ public class VehicleList extends ArrayList<Vehicle> {
 //    };
     // Default Constructor
     public VehicleList() {
-        this.add(new Vehicle("VH1000", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", 1997));
-        this.add(new Vehicle("VH1001", "VU KIM DUY1", "red", 122.333, "TOKYO", "CAR", 1998));
-        this.add(new Vehicle("VH1002", "VU KIM DUY2", "red", 122.333, "TOKYO", "CAR", 1999));
-        this.add(new Vehicle("VH1003", "VU KIM DUY3", "red", 122.333, "TOKYO", "CAR", 1990));
-        this.add(new Vehicle("VH1004", "VU KIM DUY4", "red", 122.333, "TOKYO", "CAR", 1991));
-        this.add(new Vehicle("VH1005", "VU KIM DUY5", "red", 122.333, "TOKYO", "CAR", 1992));
-        this.add(new Vehicle("VH1006", "VU KIM DUY6", "red", 122.333, "TOKYO", "CAR", 1993));
-        this.add(new Vehicle("VH1007", "VU KIM DUY7", "red", 122.333, "TOKYO", "CAR", 1994));
+        this.add(new Vehicle("VH100000", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("12-02-2000", "dd-MM-yyyy")));
+        this.add(new Vehicle("VH100100", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("20-02-2001", "dd-MM-yyyy")));
+        this.add(new Vehicle("VH100200", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("13-02-2002", "dd-MM-yyyy")));
+        this.add(new Vehicle("VH100300", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("14-02-2010", "dd-MM-yyyy")));
+        this.add(new Vehicle("VH100400", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("15-02-1900", "dd-MM-yyyy")));
+        this.add(new Vehicle("VH100500", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("16-02-2100", "dd-MM-yyyy")));
+        this.add(new Vehicle("VH100600", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("17-02-2002", "dd-MM-yyyy")));
+        this.add(new Vehicle("VH100700", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("22-02-2009", "dd-MM-yyyy")));
     }
 
-    // TODO: addVehicle
+    /** Add newly created Vehicle object to the list
+     * <br>Ask user to continue 
+     */
     public void addVehicle() {
-        String name, color, brand, type, id;
+        String name, color, brand, type, id = null;
         double price;
-        int productYear;
+        Date productDate;
         boolean isExisted = false;
 
         // Input id and precheck its existance or not
@@ -54,9 +58,12 @@ public class VehicleList extends ArrayList<Vehicle> {
             id = Utilities.readString("Enter Vehicle's ID",
                                       new String[]{Constants.INVALID_MSG("Vehicle's Id"),
                                                    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Id",
-                                                                                    "VH******, * is from 0 - 9.", "no special")
+                                                                                    "VH****** (* is from 0 - 9)",
+                                                                                    "Cannot be null",
+                                                                                    "No special characters")
                                       },
-                                      "^VH\\d{4}$");
+                                      "^VH\\d{6}$",
+                                      false);
 
             // Checking existance of the Vehicle's ID
             isExisted = checkExist(new Vehicle(id));
@@ -69,8 +76,71 @@ public class VehicleList extends ArrayList<Vehicle> {
 
         // Input Name
         name = Utilities.readString("Enter Vehicle's Name",
-                                    new String[]{"Invalid Vehicle's Name. Please Try Again.",
-                                                 "The Vehicle's Name must be less than 30. No special character"}, "\\w{30}");
+                                    new String[]{Constants.INVALID_MSG("Vehicle's Name"),
+                                                 Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Name",
+                                                                                  "Name must be between 8 to 30 characters",
+                                                                                  "No special characters",
+                                                                                  "Cannot be null",
+                                                                                  "Contains only alphabets, numeric characters and space")},
+                                    "^[a-zA-Z0-9 ]{8,30}$",
+                                    false);
+
+        // Input Type
+        type = Utilities.readString("Enter Vehicle's Type",
+                                    new String[]{Constants.INVALID_MSG("Vehicle's Type"),
+                                                 Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Type",
+                                                                                  "No special characters",
+                                                                                  "Contains only alphabet characters and space"),
+                                                 Constants.DEFAULT_VALUE_MSG("Vehicle's Type", "null")},
+                                    "^[a-zA-Z ]+$",
+                                    true);
+        type = type.isEmpty() ? "NULL" : type;
+
+        // Input Color
+        color = Utilities.readString("Enter Vehicle's Color",
+                                     new String[]{Constants.INVALID_MSG("Vehicle's Color"),
+                                                  Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Color",
+                                                                                   "No special characters",
+                                                                                   "Contains only alphabet characters and space"),
+                                                  Constants.DEFAULT_VALUE_MSG("Vehicle's Color", "null")},
+                                     "^[a-zA-Z ]+$",
+                                     true);
+        color = color.isEmpty() ? "NULL" : color;
+
+        // Input Brand
+        brand = Utilities.readString("Enter Vehicle's Brand",
+                                     new String[]{Constants.INVALID_MSG("Vehicle's Brand"),
+                                                  Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Brand",
+                                                                                   "No special characters",
+                                                                                   "Contains only alphabet characters and space"),
+                                                  Constants.DEFAULT_VALUE_MSG("Vehicle's Brand", "null")},
+                                     "^[a-zA-Z ]+$",
+                                     true);
+        brand = brand.isEmpty() ? "NULL" : brand;
+
+        // Input price
+        price = Double.parseDouble(Utilities.readString("Enter Vehicle's Price",
+                                                        new String[]{Constants.INVALID_MSG("Vehicle's Price"),
+                                                                     Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Price",
+                                                                                                      "Price must be greater than or equal to 0",
+                                                                                                      "No special characters",
+                                                                                                      "Have to be numeric type")},
+                                                        "^\\d+.?\\d*$",
+                                                        false));
+
+        // Input year
+        productDate = Utilities.readDate("Enter Vehicle's Date",
+                                         new String[]{Constants.INVALID_MSG("Vehicle's Price"),
+                                                      Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Date",
+                                                                                       "Date must be in format dd-MM-yyyy",
+                                                                                       "No special characters")},
+                                         "dd-MM-yyyy");
+
+        // Adding new vehicle to the list
+        Vehicle newVehicle = new Vehicle(id, name, color, price, brand, type, productDate);
+        this.add(newVehicle);
+
+        // Ask user to continue adding to the list
     }
 
     /** Check the existance of the Vehicle based on Id
@@ -82,7 +152,9 @@ public class VehicleList extends ArrayList<Vehicle> {
         return this.contains(vehicle);
     }
 
-    // TODO: display all vehicles
+    /** Display Vehicles from the list
+     *
+     */
     public void displayVehicles() {
         for (Vehicle vehicle : this) {
             System.out.println(vehicle.toString());

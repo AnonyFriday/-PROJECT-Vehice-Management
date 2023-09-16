@@ -65,22 +65,22 @@ public class UtilitiesTesting {
 
     public static void testDateAndBeforeAndAfter() {
         // Testing reading Date
-        Date currentDate = Utilities.readDate("Enter date with format dd-MM-yyyy", "dd-MM-yyyy");
-        Date beforeDate = Utilities.readDateBefore("Enter the date before " + Utilities.parseStringFromDate(currentDate, "dd-MM-yyyy") + " with format dd-MM-yyyy",
-                                                   "dd-MM-yyyy",
-                                                   currentDate);
-        Date afterDate = Utilities.readDateAfter("Enter the date after " + Utilities.parseStringFromDate(currentDate, "dd-MM-yyyy") + " with format dd-MM-yyyy",
-                                                 "dd-MM-yyyy",
-                                                 currentDate);
+//        Date currentDate = Utilities.readDate("Enter date with format dd-MM-yyyy", "dd-MM-yyyy");
+//        Date beforeDate = Utilities.readDateBefore("Enter the date before " + Utilities.parseStringFromDate(currentDate, "dd-MM-yyyy") + " with format dd-MM-yyyy",
+//                                                   "dd-MM-yyyy",
+//                                                   currentDate);
+//        Date afterDate = Utilities.readDateAfter("Enter the date after " + Utilities.parseStringFromDate(currentDate, "dd-MM-yyyy") + " with format dd-MM-yyyy",
+//                                                 "dd-MM-yyyy",
+//                                                 currentDate);
 
-        System.out.println("Date: " + currentDate);
-        System.out.println("Date Before: " + beforeDate);
-        System.out.println("Date After: " + afterDate);
+//        System.out.println("Date: " + currentDate);
+//        System.out.println("Date Before: " + beforeDate);
+//        System.out.println("Date After: " + afterDate);
 
     }
 
     public static void testStringAndBooleanInput() {
-        System.out.println("String: " + Utilities.readString("Enter the number", new String[]{"Invalid Message. Please try again."}, "^\\d{6,}$"));
+//        System.out.println("String: " + Utilities.readString("Enter the number", new String[]{"Invalid Message. Please try again."}, "^\\d{6,}$"));
         System.out.println("Boolean: " + Utilities.readBoolean("Enter the boolean", new String[]{"Invalid Boolean. Please try again."}));
     }
 

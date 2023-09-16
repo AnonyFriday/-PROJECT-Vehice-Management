@@ -4,6 +4,9 @@
  */
 package vehiclemanagement;
 
+import java.util.Date;
+import tools.Utilities;
+
 /**
  *
  * @author duyvu
@@ -16,7 +19,7 @@ public class Vehicle implements Comparable<Vehicle> {
     double price;
     String brand;
     String type;
-    int productYear;
+    Date productDate;
 
     public Vehicle(String id) {
         this.id = id;
@@ -28,14 +31,14 @@ public class Vehicle implements Comparable<Vehicle> {
                    double price,
                    String brand,
                    String type,
-                   int productYear) {
+                   Date productDate) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.price = price;
         this.brand = brand;
         this.type = type;
-        this.productYear = productYear;
+        this.productDate = productDate;
     }
 
     /** Comparing 2 Vehicles criteria applied on Sort algorithm
@@ -67,10 +70,9 @@ public class Vehicle implements Comparable<Vehicle> {
     public String toString() {
         return id + "," + name + "," + color +
                "," + price + "," + brand + "," +
-               type + "," + productYear;
+               type + "," + Utilities.parseStringFromDate(productDate, "dd-MM-yyyy");
     }
-    
-    
+
     // TODO: Read and Write from File
     // ======================================
     // = Getters & Setters
@@ -123,11 +125,11 @@ public class Vehicle implements Comparable<Vehicle> {
         this.type = type;
     }
 
-    public int getProductYear() {
-        return productYear;
+    public Date getProductDate() {
+        return productDate;
     }
 
-    public void setProductYear(int productYear) {
-        this.productYear = productYear;
+    public void setProductDate(Date productDate) {
+        this.productDate = productDate;
     }
 }
