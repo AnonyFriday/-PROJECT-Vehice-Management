@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.SpringLayout;
 
 /** Common tools in Application
  *
@@ -38,11 +39,46 @@ public abstract class Utilities {
      */
     public static Boolean parseBoolean(String input) {
 
-        // Match only 1 character: t,1,f or true at the beginning of the string
-        String regex = "^([t1f]{1}\\W*)|^(true)";
+        Boolean value;
 
-        // Return true if match each group of the given pattern
-        return input.trim().toLowerCase().matches(regex);
+        // Match only 1 character: t,1,f or true at the beginning of the string
+        String regexTrueValue = "^([t1]{1})|^(true)";
+        String regexFalseValue = "^([f0]{1})|^(false)";
+
+        // Return true | false if match each group of the given pattern
+        input = input.trim().toLowerCase();
+        if (input.matches(regexTrueValue)) {
+            return true;
+        } else if (input.matches(regexFalseValue)) {
+            return false;
+        }
+
+        // Return the null value if not matching with the boolean pattern
+        return null;
+    }
+
+    /** Reading the boolean pattern from the input string
+     *
+     * @param prompt: A prompt to input a string
+     * @param promptInputObject: A prompt for specific object's name
+     * @return true or false based on pattern configured on the for the input string
+     */
+    public static boolean readBoolean(String prompt,
+                                      String promptInputObject) {
+
+        Boolean result;
+        do {
+            System.out.print("\n" + prompt + ": ");
+            result = parseBoolean(sc.nextLine());
+
+            // If the Boolean object is null, print out to the console and try again
+            if (result == null) {
+                System.out.println(Constants.INVALID_MSG(promptInputObject));
+            }
+
+        } while (result == null);
+
+        return result;
     }
 
     // ======================================
@@ -64,7 +100,7 @@ public abstract class Utilities {
         // Second regex: 7--2///2033 => 7-2-2023 (replace all in-between special escape characters)
         String result = dateStr
                 .replaceAll("\\s+", "")
-                .replaceAll("[!@#$%^&*()_./-]+", "-");
+                .replaceAll("[!@#$%^&*()_./-]+", Constants.DATE_DELIMITER);
         return result;
     }
 
@@ -74,8 +110,8 @@ public abstract class Utilities {
      * @param dateFormat
      * @return
      */
-    public static Date parsingDateFromString(String inputStr,
-                                             String dateFormat) {
+    public static Date parseDateFromString(String inputStr,
+                                           String dateFormat) {
 
         // Format the input string to 2-3-2022
         inputStr = normalizeDateStr(inputStr);
@@ -100,8 +136,8 @@ public abstract class Utilities {
      * @param dateFormat
      * @return
      */
-    public static String parsingStringFromDate(Date date,
-                                               String dateFormat) {
+    public static String parseStringFromDate(Date date,
+                                             String dateFormat) {
         // If null than return empty string
         if (date == null) {
             return "";
@@ -137,5 +173,125 @@ public abstract class Utilities {
 
         // Other Calendar parts
         return calendar.get(calendarPart);
+    }
+
+    /** Prompting user to input a date-like-string and convert to the Date object
+     *
+     * <br>Available Date format: dd-MM-yyyy, yyyy-MM-dd,
+     *
+     * @param prompt: will be printted before inputting
+     * @param dateFormat: input a date format
+     * @return a date object based on the input string
+     */
+    public static Date readDate(String prompt,
+                                String dateFormat) {
+        Date date = null;
+        String inputStr;
+        do {
+            System.out.print("\n" + prompt + ": ");
+            inputStr = sc.nextLine().trim();
+
+            // Assign the date object created from the parsing function 
+            date = parseDateFromString(inputStr, dateFormat);
+
+            // Print the message to notice user the wrong input
+            if (date == null) {
+                System.out.println(Constants.INVALID_MSG("Date"));
+            }
+        } while (date == null);
+
+        return date;
+    }
+
+    /** Read Date Before the given date
+     *
+     *
+     * @param prompt: prompting the date to return
+     * @param dateFormat: date format
+     * @param markerDate: the given date
+     * @return the date before the given date
+     */
+    public static Date readDateBefore(String prompt,
+                                      String dateFormat,
+                                      Date markerDate) {
+        Date dateBefore = null;
+        String inputStr = null;
+        boolean isValidDateBefore = false;
+
+        do {
+            // Input the date before the marker date
+            System.out.print("\n" + prompt + ": ");
+            inputStr = sc.nextLine().trim();
+            dateBefore = parseDateFromString(inputStr, dateFormat);
+            isValidDateBefore = (dateBefore != null) && dateBefore.before(markerDate);
+
+            // Output the msg if the date is valid
+            if (!isValidDateBefore) {
+                System.out.println(Constants.INVALID_MSG("Before Date"));
+            }
+        } while (!isValidDateBefore);
+
+        return dateBefore;
+    }
+
+    /** Read Date after the given date
+     *
+     * @param prompt: prompting the date to return
+     * @param dateFormat: date format
+     * @param markerDate: the given date
+     * @return the date after the given date
+     */
+    public static Date readDateAfter(String prompt,
+                                     String dateFormat,
+                                     Date markerDate) {
+        Date dateAfter = null;
+        String inputStr = null;
+        boolean isValidDateAfter = false;
+
+        do {
+            // Input the date after the marker date
+            System.out.print("\n" + prompt + ": ");
+            inputStr = sc.nextLine().trim();
+            dateAfter = parseDateFromString(inputStr, dateFormat);
+            isValidDateAfter = (dateAfter != null) && dateAfter.after(markerDate);
+
+            // Output the msg if the date is valid
+            if (!isValidDateAfter) {
+                System.out.println(Constants.INVALID_MSG("After Date"));
+            }
+        } while (!isValidDateAfter);
+
+        return dateAfter;
+    }
+
+    // ======================================
+    // = STRING GROUPS
+    // ======================================
+    /** Read a String using the pre-define pattern
+     *
+     * @param prompt: prompting user msg
+     * @param promptInputObject: type of Object for invalid msg return
+     * @param strFormat: regular expression to match the string format
+     * @return
+     */
+    public static String readString(String prompt,
+                                    String promptInputObject,
+                                    String strFormat) {
+
+        String inputStr;
+        boolean isMatched = false;
+        do {
+            System.out.println("\n" + prompt + ":");
+            inputStr = sc.nextLine().trim();
+
+            isMatched = inputStr.matches(strFormat);
+
+            // Print the message to notice user the wrong input            
+            if (!isMatched) {
+                System.out.println(Constants.INVALID_MSG(promptInputObject));
+            }
+        } while (!isMatched);
+
+        return inputStr;
     }
 }

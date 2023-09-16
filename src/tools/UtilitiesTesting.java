@@ -15,7 +15,7 @@ import java.util.Date;
  */
 public class UtilitiesTesting {
 
-    public static void main(String[] args) {
+    public static void testParsingBoolean() {
         // Testing Parsing Boolean
         System.out.println("Resolve: " + Utilities.parseBoolean("1"));
         System.out.println("Resolve: " + Utilities.parseBoolean("1asd"));
@@ -25,16 +25,22 @@ public class UtilitiesTesting {
         System.out.println("Resolve: " + Utilities.parseBoolean("tasdasd"));
         System.out.println("Resolve: " + Utilities.parseBoolean("0"));
         System.out.println("Resolve: " + Utilities.parseBoolean("asd0"));
+    }
 
+    public static void testNormalizingTheDateString() {
         // Testing normalizing the date str
         System.out.println("Resolve: " + Utilities.normalizeDateStr("7    --- 2 ///  2023"));
         System.out.println("Resolve: " + Utilities.normalizeDateStr("7..........2 $#$%  2023"));
         System.out.println("Resolve: " + Utilities.normalizeDateStr("29    --- 2 !!!  2023"));
 
-        // Testing Parsing Date based on the given format
-        System.out.println("Resolve: " + Utilities.parsingDateFromString(Utilities.normalizeDateStr("12   -  22__ 2023"),
-                                                                         "dd-MM-yyyy"));
+    }
 
+    public static void testParsingDateFromString() {
+        // Testing Parsing Date based on the given format
+        System.out.println("Resolve: " + Utilities.parseDateFromString(Utilities.normalizeDateStr("12   -  22__ 2023"), "dd-MM-yyyy"));
+    }
+
+    public static void testDateGetPartAndParsingStringFromDate() {
         // Testing get the calendar part of the date
         // Testing Parsing String based on Date and the given format
         String[] formats = {"yyyy-MM-dd", "MM-dd-yyyy", "dd-MM-yyyy"};
@@ -44,7 +50,7 @@ public class UtilitiesTesting {
         System.out.println("");
         for (int i = 0; i < 3; i++) {
             System.out.println(dateString[i] + "(" + formats[i] + ")");
-            date = Utilities.parsingDateFromString(dateString[i], formats[i]);
+            date = Utilities.parseDateFromString(dateString[i], formats[i]);
             System.out.println("Date: " + date);
 
             if (date != null) {
@@ -55,6 +61,32 @@ public class UtilitiesTesting {
             }
         }
         System.out.println("");
+    }
 
+    public static void testDateAndBeforeAndAfter() {
+        // Testing reading Date
+        Date currentDate = Utilities.readDate("Enter date with format dd-MM-yyyy", "dd-MM-yyyy");
+        Date beforeDate = Utilities.readDateBefore("Enter the date before " + Utilities.parseStringFromDate(currentDate, "dd-MM-yyyy") + " with format dd-MM-yyyy",
+                                                   "dd-MM-yyyy",
+                                                   currentDate);
+        Date afterDate = Utilities.readDateAfter("Enter the date after " + Utilities.parseStringFromDate(currentDate, "dd-MM-yyyy") + " with format dd-MM-yyyy",
+                                                 "dd-MM-yyyy",
+                                                 currentDate);
+
+        System.out.println("Date: " + currentDate);
+        System.out.println("Date Before: " + beforeDate);
+        System.out.println("Date After: " + afterDate);
+
+    }
+
+    public static void testStringAndBooleanInput() {
+        System.out.println("String: " + Utilities.readString("Enter the number", "salary", "^\\d{6,}$"));
+        System.out.println("Boolean: " + Utilities.readBoolean("Enter the boolean", "expire"));
+    }
+
+    // Entry point of the test program
+    public static void main(String[] args) {
+//        testDateAndBeforeAndAfter();
+        testStringAndBooleanInput();
     }
 }
