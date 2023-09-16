@@ -80,8 +80,8 @@ public class UtilitiesTesting {
     }
 
     public static void testStringAndBooleanInput() {
-        System.out.println("String: " + Utilities.readString("Enter the number", "salary", "^\\d{6,}$"));
-        System.out.println("Boolean: " + Utilities.readBoolean("Enter the boolean", "expire"));
+        System.out.println("String: " + Utilities.readString("Enter the number", new String[]{"Invalid Message. Please try again."}, "^\\d{6,}$"));
+        System.out.println("Boolean: " + Utilities.readBoolean("Enter the boolean", new String[]{"Invalid Boolean. Please try again."}));
     }
 
     // Entry point of the test program

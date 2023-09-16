@@ -4,7 +4,7 @@
  */
 package tools;
 
-/**
+/** The file contains Constants Variables of the Application
  *
  * @author duyvu
  */
@@ -16,5 +16,25 @@ public abstract class Constants {
     // Invalid Message
     public static final String INVALID_MSG(String subject) {
         return "Invalid " + subject + ". Please try again.";
+    }
+
+    // Duplicated Message
+    public static final String DUPLICATED_MSG(String subject) {
+        return "Duplicated " + subject + ". Please try again.";
+    }
+
+    // In format and specific Condition Message
+    public static final String MUST_IN_CONDITIONS_MSG(String subject,
+                                                      String... conditions) {
+
+        String str = subject + " has to follow those conditions: ";
+        int L = conditions.length;
+
+        for (int i = 0; i < L - 1; i++) {
+            str = str.concat("\n\t-" + conditions[i]);
+        }
+
+        // If there is no condition, then return ""
+        return L > 0 ? str : "";
     }
 }

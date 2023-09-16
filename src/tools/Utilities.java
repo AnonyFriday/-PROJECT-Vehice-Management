@@ -27,7 +27,7 @@ public abstract class Utilities {
     // ======================================
     // = ATTRIBUTES
     // ======================================
-    private static final Scanner sc = new Scanner(System.in);
+    public static final Scanner sc = new Scanner(System.in);
 
     // ======================================
     // = BOOLEAN GROUPS
@@ -60,11 +60,11 @@ public abstract class Utilities {
     /** Reading the boolean pattern from the input string
      *
      * @param prompt: A prompt to input a string
-     * @param promptInputObject: A prompt for specific object's name
+     * @param invalidMsgs: invalid messages
      * @return true or false based on pattern configured on the for the input string
      */
     public static boolean readBoolean(String prompt,
-                                      String promptInputObject) {
+                                      String[] invalidMsgs) {
 
         Boolean result;
         do {
@@ -72,8 +72,10 @@ public abstract class Utilities {
             result = parseBoolean(sc.nextLine());
 
             // If the Boolean object is null, print out to the console and try again
-            if (result == null) {
-                System.out.println(Constants.INVALID_MSG(promptInputObject));
+            if (result == null && invalidMsgs.length > 0) {
+                for (String message : invalidMsgs) {
+                    System.out.println(message);
+                }
             }
 
         } while (result == null);
@@ -270,25 +272,28 @@ public abstract class Utilities {
     /** Read a String using the pre-define pattern
      *
      * @param prompt: prompting user msg
-     * @param promptInputObject: type of Object for invalid msg return
+     * @param invalidMsgs:invalid msgs for specific input type
      * @param strFormat: regular expression to match the string format
      * @return
      */
     public static String readString(String prompt,
-                                    String promptInputObject,
+                                    String[] invalidMsgs,
                                     String strFormat) {
 
         String inputStr;
         boolean isMatched = false;
         do {
-            System.out.println("\n" + prompt + ":");
+            System.out.print("\n" + prompt + ": ");
             inputStr = sc.nextLine().trim();
 
+            // Comparing the input and the pattern
             isMatched = inputStr.matches(strFormat);
 
-            // Print the message to notice user the wrong input            
-            if (!isMatched) {
-                System.out.println(Constants.INVALID_MSG(promptInputObject));
+            // Print notice msg if not matching the pattern and having invalid messages         
+            if (!isMatched && invalidMsgs.length > 0) {
+                for (String message : invalidMsgs) {
+                    System.out.println(message);
+                }
             }
         } while (!isMatched);
 
