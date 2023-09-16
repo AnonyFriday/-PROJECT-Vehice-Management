@@ -45,7 +45,7 @@ public class VehicleList extends ArrayList<Vehicle> {
     }
 
     /** Add newly created Vehicle object to the list
-     * <br>Ask user to continue 
+     * <br>Ask user to continue
      */
     public void addVehicle() {
         String name, color, brand, type, id = null;
@@ -122,10 +122,11 @@ public class VehicleList extends ArrayList<Vehicle> {
         price = Double.parseDouble(Utilities.readString("Enter Vehicle's Price",
                                                         new String[]{Constants.INVALID_MSG("Vehicle's Price"),
                                                                      Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Price",
+                                                                                                      "Decimal Seperator must be '.' (e.g. 123.123)",
                                                                                                       "Price must be greater than or equal to 0",
                                                                                                       "No special characters",
                                                                                                       "Have to be numeric type")},
-                                                        "^\\d+.?\\d*$",
+                                                        "^\\d+\\.?\\d*$",
                                                         false));
 
         // Input year
@@ -138,9 +139,16 @@ public class VehicleList extends ArrayList<Vehicle> {
 
         // Adding new vehicle to the list
         Vehicle newVehicle = new Vehicle(id, name, color, price, brand, type, productDate);
+        System.out.println(newVehicle);
         this.add(newVehicle);
 
         // Ask user to continue adding to the list
+        Menu.continueOption(new IContinueOption() {
+            @Override
+            public void apply() {
+                addVehicle();
+            }
+        }, "Do you want to continue adding new vehicle (Y/N).");
     }
 
     /** Check the existance of the Vehicle based on Id

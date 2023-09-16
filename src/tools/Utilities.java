@@ -42,8 +42,8 @@ public abstract class Utilities {
         Boolean value;
 
         // Match only 1 character: t,1,f or true at the beginning of the string
-        String regexTrueValue = "^([t1]{1})|^(true)";
-        String regexFalseValue = "^([f0]{1})|^(false)";
+        String regexTrueValue = "^([t1y]{1})|^(true)";
+        String regexFalseValue = "^([f0n]{1})|^(false)";
 
         // Return true | false if match each group of the given pattern
         input = input.trim().toLowerCase();

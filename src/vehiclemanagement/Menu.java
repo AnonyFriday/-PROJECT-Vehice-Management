@@ -6,6 +6,7 @@ package vehiclemanagement;
 
 import java.util.List;
 import java.util.Scanner;
+import tools.Constants;
 import tools.Utilities;
 
 /**
@@ -30,8 +31,8 @@ public class Menu {
 
     /** Get the option by Numeric type from the user
      *
-     * @param list
-     * @return
+     * @param list: a list of options
+     * @return an object chosen by the user
      */
     public static Object getChoiceObject(List list) {
         int choice = 0;
@@ -40,5 +41,26 @@ public class Menu {
             System.out.println((i + 1) + '-' + list.get(i).toString());
         }
         return (choice > 0 && choice <= L) ? list.get(choice - 1) : null;
+    }
+
+    /** Continue the method from User's actions
+     *
+     * @param continueFunction: a function to be executed next
+     * @param prompt: a prompt to continue the function
+     */
+    public static void continueOption(IContinueOption continueFunction,
+                                      String prompt) {
+
+        // Assign a list of valid error message if user input the wrong type of boolean
+        String[] invalidBooleanMsg = new String[]{
+            Constants.MUST_IN_CONDITIONS_MSG("Continue",
+                                             "Only accept boolean value (1, 0, f, t, true, false)")};
+
+        // If true, then continue the function by applying the Functional Interface
+        boolean isContinued = Utilities.readBoolean(prompt, invalidBooleanMsg);
+        while (isContinued) {
+            continueFunction.apply();
+            isContinued = Utilities.readBoolean(prompt, invalidBooleanMsg);
+        }
     }
 }
