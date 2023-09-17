@@ -12,6 +12,11 @@ package tools;
 public abstract class Constants {
 
     // ==================================
+    // == FILENAME GROUP
+    // ==================================
+    public static final String FILENAME = "./data/vehicle.dat";
+
+    // ==================================
     // == DATE GROUP
     // ==================================
     public static final String DATE_DELIMITER = "-";
@@ -57,11 +62,13 @@ public abstract class Constants {
     // ==================================
     // == OUTPUT DRAWING GROUP
     // ==================================
-    public static final void DRAWING_TABLE_EDGE_LINE_SMALL() {
-	System.out.printf("\t\t+-----------------------+%n");
+    public static final void DRAWING_LINE_ONE_MESSAGE(String prompt) {
+	System.out.println("\n\t\t=========================");
+	System.out.print("\t\t" + prompt);
+	System.out.println("\n\t\t=========================");
     }
 
-    public static final void DRAWING_TABLE_EDGE_LINE_LARGE() {
-	System.out.printf("\t\t+----------------------------------------------+%n");
+    public static final void DRAWING_TABLE_EDGE_LINE() {
+	System.out.println("\t\t+----------------------------------------------+");
     }
 }

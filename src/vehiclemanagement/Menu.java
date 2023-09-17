@@ -25,7 +25,7 @@ public class Menu {
 
 	// Drawing console top edge
 	System.out.println("");
-	Constants.DRAWING_TABLE_EDGE_LINE_LARGE();
+	Constants.DRAWING_TABLE_EDGE_LINE();
 
 	final int L = options.length;
 	for (int i = 0; i < L; i++) {
@@ -33,7 +33,7 @@ public class Menu {
 	}
 
 	// Drawing console bottom edge
-	Constants.DRAWING_TABLE_EDGE_LINE_LARGE();
+	Constants.DRAWING_TABLE_EDGE_LINE();
 
 	// Precheck the input option as the integer 
 	return Integer.parseInt(Utilities.readString("Choose (1.." + L + ")(Other Numbers to exit program)",

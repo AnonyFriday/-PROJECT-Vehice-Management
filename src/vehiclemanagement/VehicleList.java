@@ -4,6 +4,13 @@
  */
 package vehiclemanagement;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,6 +19,11 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import tools.Constants;
 import tools.Utilities;
 
@@ -21,24 +33,16 @@ import tools.Utilities;
  */
 public class VehicleList extends ArrayList<Vehicle> {
 
-//    Comparator<Vehicle> cNameDesc = new Comparator<Vehicle>() {
-//        @Override
-//        public int compare(Vehicle o1,
-//                           Vehicle o2) {
-//            return -o1.name.compareTo(o2.name);
-//        }
-//    };
     // Default Constructor
     public VehicleList() {
-	this.add(new Vehicle("VH100400", "KIM ", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("15-02-1900", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100000", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("12-02-2000", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100100", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("20-02-2001", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100500", "DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("16-02-2100", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100600", " DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("17-02-2002", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100700", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("22-02-2009", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100200", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("13-02-2002", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100300", "KIM ", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("14-02-2010", "dd-MM-yyyy")));
-
+//	this.add(new Vehicle("VH100400", "KIM ", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("15-02-1900", "dd-MM-yyyy")));
+//	this.add(new Vehicle("VH100000", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("12-02-2000", "dd-MM-yyyy")));
+//	this.add(new Vehicle("VH100100", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("20-02-2001", "dd-MM-yyyy")));
+//	this.add(new Vehicle("VH100500", "DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("16-02-2100", "dd-MM-yyyy")));
+//	this.add(new Vehicle("VH100600", " DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("17-02-2002", "dd-MM-yyyy")));
+//	this.add(new Vehicle("VH100700", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("22-02-2009", "dd-MM-yyyy")));
+//	this.add(new Vehicle("VH100200", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("13-02-2002", "dd-MM-yyyy")));
+//	this.add(new Vehicle("VH100300", "KIM ", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("14-02-2010", "dd-MM-yyyy")));
     }
 
     // ==================================
@@ -567,5 +571,155 @@ public class VehicleList extends ArrayList<Vehicle> {
 	}
     }
 
-// TODO: saves all vehicles to file
+    // ==================================
+    // == FILE GROUP
+    // ==================================
+    /**
+     * Loading content from file to the list
+     *
+     * @param filename: a file contains vehicles
+     */
+    public void loadVehiclesFromFile(String filename) {
+
+	// Precheck if the file has been loaded
+	if (!this.isEmpty()) {
+	    Constants.DRAWING_LINE_ONE_MESSAGE("File has been loaded. Cannot load more.");
+	    return;
+	}
+
+	// Reading file stream
+	FileReader fileReader = null;
+
+	// Reading file by line
+	BufferedReader bufferReader = null;
+
+	try {
+	    fileReader = new FileReader(new File(filename));
+	    bufferReader = new BufferedReader(fileReader);
+	    String line = bufferReader.readLine();
+
+	    // Iterating each line of file to extract format
+	    while (line != null) {
+		// Line format: id,name,color,price,brand,type,productDate
+		StringTokenizer str = new StringTokenizer(line, ",");
+
+		// Adding those token into Vehicle's attributes
+		String id = str.nextToken().trim();
+		String name = str.nextToken().trim();
+		String color = str.nextToken().trim();
+		double price = Double.parseDouble(str.nextToken().trim());
+		String brand = str.nextToken().trim();
+		String type = str.nextToken().trim();
+		Date productDate = Utilities.parseDateFromString(str.nextToken().trim(), Constants.DATE_FORMAT);
+
+		// Adding to the list
+		this.add(new Vehicle(id, name, color, price, brand, type, productDate));
+
+		// Next line
+		line = bufferReader.readLine();
+	    }
+
+	    // Print sucessful messages
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Loaded file successfully.");
+
+	} catch (FileNotFoundException ex) {
+
+	    // Exit and printout if file is not 
+	    System.err.println(ex);
+	    System.out.println("File not found. Please try again.");
+
+	} catch (IOException ex) {
+
+	    // Logging if IO having problems
+	    Logger.getLogger(VehicleList.class.getName()).log(Level.SEVERE, null, ex);
+
+	} finally {
+
+	    // Close all streams
+	    try {
+		fileReader.close();
+		bufferReader.close();
+	    } catch (IOException ex) {
+		Logger.getLogger(VehicleList.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+    }
+
+    /**
+     * Save list of vehicles to the file
+     *
+     * <br>With the mode isOverride, the file will be save to the original file if turning
+     * <br>on or save at new file, same location if turning off
+     *
+     * @param filename: a file is saved from the program
+     */
+    public void saveVehiclesFromFile(String fileName) {
+
+	// Reading file stream
+	FileWriter fileWriter = null;
+
+	// Reading file by line
+	PrintWriter printWriter = null;
+
+	// File to save with overriden mode
+	// vehicle.dat -> vehicleModified.dat
+	fileName = isSaveAtNewFile(fileName);
+
+	try {
+	    fileWriter = new FileWriter(fileName);
+	    printWriter = new PrintWriter(fileWriter);
+
+	    // Iterating the list and send the the writer stream
+	    for (Vehicle vehicle : this) {
+		printWriter.write(vehicle.toString());
+	    }
+
+	    // Print sucessful messages
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Save file successfully.");
+
+	} catch (FileNotFoundException ex) {
+
+	    // Exit and printout if file is not 
+	    System.err.println(ex);
+	    System.out.println("File not found. Please try again.");
+
+	} catch (IOException ex) {
+
+	    // Logging if IO having problems
+	    Logger.getLogger(VehicleList.class.getName()).log(Level.SEVERE, null, ex);
+
+	} finally {
+
+	    // Close all streams
+	    try {
+		fileWriter.close();
+		printWriter.close();
+	    } catch (IOException ex) {
+		Logger.getLogger(VehicleList.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+    }
+
+    /**
+     * Determine the file is being override or saved at new file
+     *
+     * @param fileName: original file
+     * @return a file to be save
+     */
+    public String isSaveAtNewFile(String fileName) {
+	boolean isSaveAtNewFile = Utilities.readBoolean("Do you want to save at new file (Y/N)",
+		new String[]{"Only accept boolean value (Y/N)"});
+
+	if (isSaveAtNewFile) {
+	    // vehicle.dat -> vehicleCopied.dat
+	    String regex = "(\\w+)(\\.(dat|txt))$";
+	    String replacementFile = "$1Copied$2";
+
+	    Pattern p = Pattern.compile(regex);
+	    Matcher m = p.matcher(fileName);
+
+	    fileName = m.replaceAll(replacementFile);
+	}
+	return fileName;
+    }
 }

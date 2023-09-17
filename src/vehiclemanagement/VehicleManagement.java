@@ -1,6 +1,8 @@
 package vehiclemanagement;
 
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tools.Constants;
 import tools.Utilities;
 
@@ -19,9 +21,19 @@ public class VehicleManagement {
 	int userChoice;
 	boolean isExitedProgram = false;
 
-	// A switching structure program conducted by the user's option
+//	// Loading resources from file first before using the program
+//	Thread loadResourcesThread = new Thread(() -> {
+//	    list.loadVehiclesFromFile(Constants.FILENAME);
+//	});
+//	loadResourcesThread.start();
+//
+//	// Main thread waiting for the Loading Resource Thread terminates
+//	try {
+//	    loadResourcesThread.join();
+//	} catch (InterruptedException ex) {
+//	    Logger.getLogger(VehicleManagement.class.getName()).log(Level.SEVERE, null, ex);
+//	}
 	do {
-
 	    // Generate the Menu options
 	    userChoice = Menu.getChoiceInt(
 		    "Add new Vehicle",
@@ -80,9 +92,11 @@ public class VehicleManagement {
 		    break;
 		}
 		case 7: {
+		    list.saveVehiclesFromFile(Constants.FILENAME);
 		    break;
 		}
 		case 8: {
+		    list.loadVehiclesFromFile(Constants.FILENAME);
 		    break;
 		}
 		default: {
