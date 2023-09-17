@@ -45,6 +45,9 @@ public class VehicleList extends ArrayList<Vehicle> {
 	this.add(new Vehicle("VH100700", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("22-02-2009", "dd-MM-yyyy")));
     }
 
+    // ==================================
+    // == ADD GROUP 
+    // ==================================
     /**
      * Add newly created Vehicle object to the list
      * <br>Ask user to continue
@@ -53,7 +56,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 	String name, color, brand, type, id;
 	double price;
 	Date productDate;
-	boolean isExisted = false;
+	int foundVehicleIndex = -1;
 
 	// Input id and precheck its existance or not
 	do {
@@ -68,13 +71,13 @@ public class VehicleList extends ArrayList<Vehicle> {
 		    false);
 
 	    // Checking existance of the Vehicle's ID
-	    isExisted = checkVehiclekExist(new Vehicle(id));
+	    foundVehicleIndex = checkVehiclekExist(new Vehicle(id));
 
 	    // Output to user as if id is duplicated
-	    if (isExisted) {
+	    if (foundVehicleIndex != -1) {
 		System.out.println(Constants.DUPLICATED_MSG("Vehicle's ID"));
 	    }
-	} while (isExisted);
+	} while (foundVehicleIndex != -1);
 
 	// Input Name
 	name = Utilities.readString("Enter Vehicle's Name",
@@ -150,22 +153,41 @@ public class VehicleList extends ArrayList<Vehicle> {
 	}
     }
 
+    // ==================================
+    // == UPDATE GROUP 
+    // ==================================
+    public void updateVehicle() {
+	// Find ID and extract the Vehicle on that ID
+	int foundVehicleIndex = checkVehicleExistOnId();
+	Vehicle vehicle = null;
+
+	// Get the founded Vehicle and update the information
+	if (foundVehicleIndex != -1) {
+	    vehicle = this.get(foundVehicleIndex);
+	    System.out.println(vehicle.toString());
+	}
+    }
+
+    // ==================================
+    // == CHECK EXISTANCE GROUP 
+    // ==================================
     /**
      * Check the existance of the Vehicle based on ID
      *
      * @param vehicle: a passed vehicle to the function
-     * @return true or false depends on the existance of the vehicle
+     * @return -1 or the index of the founded Vehicle
      */
-    private boolean checkVehiclekExist(Vehicle vehicle) {
-	return this.contains(vehicle);
+    private int checkVehiclekExist(Vehicle vehicle) {
+	return this.indexOf(vehicle);
     }
 
     /**
      * Check to see if the Vehicle'ID exist in the list or not
      *
+     * @return -1 or the index of the founded Vehicle
      */
-    public void checkVehicleExistOnId() {
-	String id = "";
+    public int checkVehicleExistOnId() {
+	String id = null;
 
 	// Input id and precheck its pattern
 	do {
@@ -182,15 +204,19 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	// Check if the passed id is on the list or not
 	Vehicle vehicle = new Vehicle(id);
-	if (checkVehiclekExist(vehicle)) {
-	    System.out.println("The vehicle " + id + " is on the list.");
+	int foundVehicleIndex = checkVehiclekExist(vehicle);
+	if (foundVehicleIndex != -1) {
+	    System.out.println("The vehicle " + id + " founded at index " + foundVehicleIndex);
 	} else {
 	    System.out.println("Not found " + id);
 	}
+
+	// Return Vehicle's ID if found
+	return foundVehicleIndex;
     }
 
     // ==================================
-    // == DISPLAY GROUP METHODS
+    // == DISPLAY GROUP 
     // ==================================
     /**
      * Display Vehicles from the list by 2 options
@@ -267,9 +293,4 @@ public class VehicleList extends ArrayList<Vehicle> {
     // TODO: Remove
     // TODO: search. Denote that do not precheck the String for searching
     // TODO: saves all vehicles to file
-    public static void main(String[] args) {
-	VehicleList list = new VehicleList();
-	list.displayVehicles();
-	list.addVehicle();
-    }
 }

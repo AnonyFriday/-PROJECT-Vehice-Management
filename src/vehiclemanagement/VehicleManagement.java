@@ -24,7 +24,7 @@ public class VehicleManagement {
 
 	    // Generate the Menu options
 	    userChoice = Menu.getChoiceInt("Add new Vehicle",
-		    "Check exists Vehicle",
+		    "Check Vehicle's existance",
 		    "Update Vehicle",
 		    "Delete Vehicle",
 		    "Search Vehicle",
@@ -51,6 +51,7 @@ public class VehicleManagement {
 
 		// Update Vehicle on ID
 		case 3: {
+		    list.updateVehicle();
 		    break;
 		}
 		case 4: {
