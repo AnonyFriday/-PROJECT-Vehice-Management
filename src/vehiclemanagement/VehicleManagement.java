@@ -52,23 +52,29 @@ public class VehicleManagement {
 
 		// Update Vehicle on ID
 		case 3: {
-		    list.updateVehicle();
+		    list.updateVehicleOnId();
 		    break;
 		}
 
 		// Remove Vehicle on ID
 		case 4: {
-		    list.removeVehicle();
+		    list.removeVehicleOnId();
 		    break;
 		}
+		// Search Vehicle on Id, Name, Min-Max Date
 		case 5: {
+		    list.searchVehicles();
+
+		    // Ask user to continue searching to the list
+		    Menu.continueOption(() -> list.searchVehicles(),
+			    "Do you want to continue SEARCHING vehicles (Y/N)");
 		    break;
 		}
 		// Display Vehicles
 		case 6: {
 		    list.displayVehicles();
 
-		    // Ask user to continue adding to the list
+		    // Ask user to continue displaying to the list
 		    Menu.continueOption(() -> list.displayVehicles(),
 			    "Do you want to continue DISPLAYING vehicles (Y/N)");
 		    break;

@@ -7,8 +7,10 @@ package vehiclemanagement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 import tools.Constants;
 import tools.Utilities;
@@ -28,14 +30,15 @@ public class VehicleList extends ArrayList<Vehicle> {
 //    };
     // Default Constructor
     public VehicleList() {
-	this.add(new Vehicle("VH100000", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("12-02-2000", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100100", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("20-02-2001", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100200", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("13-02-2002", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100300", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("14-02-2010", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100400", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("15-02-1900", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100500", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("16-02-2100", "dd-MM-yyyy")));
-	this.add(new Vehicle("VH100600", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("17-02-2002", "dd-MM-yyyy")));
+	this.add(new Vehicle("VH100400", "KIM ", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("15-02-1900", "dd-MM-yyyy")));
+	this.add(new Vehicle("VH100000", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("12-02-2000", "dd-MM-yyyy")));
+	this.add(new Vehicle("VH100100", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("20-02-2001", "dd-MM-yyyy")));
+	this.add(new Vehicle("VH100500", "DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("16-02-2100", "dd-MM-yyyy")));
+	this.add(new Vehicle("VH100600", " DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("17-02-2002", "dd-MM-yyyy")));
 	this.add(new Vehicle("VH100700", "VU KIM DUY", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("22-02-2009", "dd-MM-yyyy")));
+	this.add(new Vehicle("VH100200", "VU", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("13-02-2002", "dd-MM-yyyy")));
+	this.add(new Vehicle("VH100300", "KIM ", "red", 122.333, "TOKYO", "CAR", Utilities.parseDateFromString("14-02-2010", "dd-MM-yyyy")));
+
     }
 
     // ==================================
@@ -65,7 +68,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 		    false);
 
 	    // Checking existance of the Vehicle's ID
-	    foundVehicleIndex = checkVehiclekExist(new Vehicle(id));
+	    foundVehicleIndex = checkVehiclekExistOnObject(new Vehicle(id));
 
 	    // Output to user as if id is duplicated
 	    if (foundVehicleIndex != -1) {
@@ -144,7 +147,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 	// - If user enter nothing, than assign 01-01-1970 as the default value
 	// - If user enter the date, then precheck it through the readDate function
 	productDate = Utilities.readDate("Enter Vehicle's Date (Default is 01-01-1970)",
-		new String[]{Constants.INVALID_MSG("Vehicle's Price"),
+		new String[]{Constants.INVALID_MSG("Vehicle's Date"),
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Date",
 			    "Date must be in format dd-MM-yyyy",
 			    "No special characters"),
@@ -171,7 +174,10 @@ public class VehicleList extends ArrayList<Vehicle> {
     // ==================================
     // == UPDATE GROUP 
     // ==================================
-    public void updateVehicle() {
+    /**
+     * Update Vehicle Info based on Id
+     */
+    public void updateVehicleOnId() {
 	// Find ID and extract the Vehicle on that ID
 	int foundVehicleIndex = checkVehicleExistOnId();
 	Vehicle vehicle = null;
@@ -291,7 +297,7 @@ public class VehicleList extends ArrayList<Vehicle> {
      * @param vehicle: a passed vehicle to the function
      * @return -1 or the index of the founded Vehicle
      */
-    private int checkVehiclekExist(Vehicle vehicle) {
+    private int checkVehiclekExistOnObject(Vehicle vehicle) {
 	return this.indexOf(vehicle);
     }
 
@@ -318,7 +324,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	// Check if the passed id is on the list or not
 	Vehicle vehicle = new Vehicle(id);
-	int foundVehicleIndex = checkVehiclekExist(vehicle);
+	int foundVehicleIndex = checkVehiclekExistOnObject(vehicle);
 	if (foundVehicleIndex != -1) {
 	    System.out.println("The vehicle " + id + " founded at index " + foundVehicleIndex);
 	    System.out.println("Vehicle: " + this.get(foundVehicleIndex).toString());
@@ -350,18 +356,14 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	    // Display Vehicles without condition
 	    case 1: {
-		displayVehiclesAll();
+		displayVehiclesNoCondition();
 		break;
 	    }
 
 	    // Display Vehicles by year
 	    case 2: {
-		int year = Integer.parseInt(Utilities.readString("Enter the year",
-			new String[]{"Year accepts only numeric value (e.g. 1999)"},
-			"^\\d{4}$",
-			false));
 
-		displayVechiclesAll(year);
+		displayVechiclesByYear();
 		break;
 	    }
 	    default: {
@@ -373,33 +375,51 @@ public class VehicleList extends ArrayList<Vehicle> {
     /**
      * Display all Vehicles without any condition
      */
-    private void displayVehiclesAll() {
+    private void displayVehiclesNoCondition() {
 	for (Vehicle vehicle : this) {
 	    System.out.println(vehicle.toString());
 	}
     }
 
     /**
-     * Display all Vehicles by year
+     * Display all Vehicles by year greater than inputted year
      *
      * @param year: matching year
      */
-    private void displayVechiclesAll(int year) {
-	boolean isFoundByYear = false;
+    private void displayVechiclesByYear() {
+	// Enter the production year of the vehicle
+	int year = Integer.parseInt(Utilities.readString("Enter the year",
+		new String[]{"Year accepts only numeric value (e.g. 1999)"},
+		"^\\d{4}$",
+		false));
+
+	// Iterating and find vehicles machtching names
+	List<Vehicle> matches = new ArrayList<>();
 	for (Vehicle vehicle : this) {
 
 	    // Extract the year from Vehicle's product date
 	    int productYear = Utilities.getDatePart(vehicle.getProductDate(), Calendar.YEAR);
 
-	    // Print all matched vehicles
-	    if (productYear == year) {
-		isFoundByYear = true;
-		System.out.println(vehicle.toString());
+	    // Add matched vehicles
+	    if (productYear >= year) {
+		matches.add(vehicle);
 	    }
 	}
 
+	// Sorting matched vehicles field decensdingly by year
+	Collections.sort(matches, (Vehicle o1, Vehicle o2) -> {
+	    int o1_year = Utilities.getDatePart(o1.getProductDate(), Calendar.YEAR);
+	    int o2_year = Utilities.getDatePart(o2.getProductDate(), Calendar.YEAR);
+	    return o2_year - o1_year;
+	});
+
+	// Print out the matches
+	for (Vehicle vehicle : matches) {
+	    System.out.println(vehicle.toString());
+	}
+
 	// If not found, output the message
-	if (!isFoundByYear) {
+	if (matches.isEmpty()) {
 	    System.out.println(Constants.EMPTY_VALUE_MSG);
 	}
     }
@@ -407,7 +427,10 @@ public class VehicleList extends ArrayList<Vehicle> {
     // ==================================
     // == REMOVE GROUP
     // ==================================
-    public void removeVehicle() {
+    /**
+     * Remove Vehicle from the list based on ID
+     */
+    public void removeVehicleOnId() {
 	// Find ID and extract the Vehicle on that ID
 	int foundVehicleIndex = checkVehicleExistOnId();
 
@@ -432,6 +455,117 @@ public class VehicleList extends ArrayList<Vehicle> {
 	}
     }
 
-    // TODO: search. Denote that do not precheck the String for searching
-    // TODO: saves all vehicles to file
+    // ==================================
+    // == SEARCH GROUP
+    // ==================================
+    /**
+     * Searching Vehicles By Multiple options
+     */
+    public void searchVehicles() {
+	// Get option of searching vehicles
+	byte option = (byte) Menu.getChoiceInt(
+		"Search By Id",
+		"Search By Name",
+		"Search By In Range of Min and Max Date");
+
+	switch (option) {
+
+	    // Searching By Id
+	    case 1: {
+		searchVehicleById();
+		break;
+	    }
+
+	    // Search By Name
+	    case 2: {
+		searchVehicleByName();
+		break;
+	    }
+
+	    // Search in Range of Date
+	    case 3: {
+		searchVehicleByDateInRange();
+		break;
+	    }
+	    default: {
+		break;
+	    }
+	}
+    }
+
+    /**
+     * Searching Vehicles By Id
+     */
+    public void searchVehicleById() {
+	checkVehicleExistOnId();
+    }
+
+    /**
+     * Searching Vehicles By Names
+     *
+     * @return a list of matched and sorted names
+     */
+    public void searchVehicleByName() {
+	// Input Name
+	// - Does not allow null value since making no sense if storing unknown vehicle
+	// - If user enter the name, then precheck it through the readString function
+	String name = Utilities.readString("Enter Name Keyword",
+		new String[]{Constants.INVALID_MSG("Name Keyword"),
+		    Constants.MUST_IN_CONDITIONS_MSG("Name Keyword",
+			    "No special characters",
+			    "Name contains only alphabets, numeric characters and space")},
+		"^[a-zA-Z0-9 ]*$",
+		false);
+
+	// Iterating and find vehicles machtching names
+	List<Vehicle> matches = new ArrayList<>();
+	for (Vehicle vehicle : this) {
+	    if (vehicle.getName().toLowerCase().contains(name.toLowerCase())) {
+		matches.add(vehicle);
+	    }
+	}
+
+	// Sorting Matched Names Descendingly
+	Collections.sort(matches, (Vehicle o1, Vehicle o2) -> -o1.getName().compareToIgnoreCase(o2.getName()));
+
+	// Printout the list of matching names
+	for (Vehicle vehicle : matches) {
+	    System.out.println(vehicle.toString());
+	}
+    }
+
+    /**
+     * Search Vehicles By Date in Range
+     */
+    public void searchVehicleByDateInRange() {
+	// Input min date
+	// - If user enter the date, then precheck it through the readDate function
+	Date minDate = Utilities.readDate("Enter Min Date",
+		new String[]{Constants.INVALID_MSG("Min Date"),
+		    Constants.MUST_IN_CONDITIONS_MSG("Min Date",
+			    "Date must be in format dd-MM-yyyy",
+			    "No special characters")},
+		"dd-MM-yyyy",
+		false);
+
+	// Input max date based on min date
+	Date maxDate = Utilities.readDateAfter("Enter Max Date",
+		new String[]{Constants.INVALID_MSG("Max Date"),
+		    Constants.MUST_IN_CONDITIONS_MSG("Max Date",
+			    "Date must be in format dd-MM-yyyy",
+			    "No special characters",
+			    "Max date has to be after " + Utilities.parseStringFromDate(minDate, "dd-MM-yyyy"))},
+		"dd-MM-yyyy", minDate);
+
+	// Iterating and find vehicles machtching in range of min and max date
+	// minDate <= target <= maxDate
+	for (Vehicle vehicle : this) {
+	    if ((vehicle.getProductDate().after(minDate) || vehicle.getProductDate().equals(minDate))
+		    && (vehicle.getProductDate().before(maxDate) || vehicle.getProductDate().equals(maxDate))) {
+		System.out.println(vehicle.toString());
+	    }
+	}
+    }
+
+// TODO: saves all vehicles to file
 }
