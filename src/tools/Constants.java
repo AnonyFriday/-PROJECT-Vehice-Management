@@ -64,7 +64,7 @@ public abstract class Constants {
     // ==================================
     public static final void DRAWING_LINE_ONE_MESSAGE(String prompt) {
 	System.out.println("\n\t\t+==============================================+");
-	System.out.print("\t\t" + prompt);
+	System.out.print("\t\t| " + prompt);
 	System.out.println("\n\t\t+==============================================+");
     }
 

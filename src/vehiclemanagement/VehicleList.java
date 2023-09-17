@@ -285,7 +285,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 	    }
 
 	    // Printout the Vehicle after updating successfully
-	    System.out.println("Updating Successfully. New updated value: " + vehicle.toString());
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Updating Successfully. New updated value: " + vehicle.toString());
 	}
     }
 
@@ -327,10 +327,10 @@ public class VehicleList extends ArrayList<Vehicle> {
 	Vehicle vehicle = new Vehicle(id);
 	int foundVehicleIndex = checkVehiclekExistOnObject(vehicle);
 	if (foundVehicleIndex != -1) {
-	    System.out.println("The vehicle " + id + " founded at index " + foundVehicleIndex);
-	    System.out.println("Vehicle: " + this.get(foundVehicleIndex).toString());
+	    Constants.DRAWING_LINE_ONE_MESSAGE("The vehicle " + id + " founded at index " + foundVehicleIndex);
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Vehicle: " + this.get(foundVehicleIndex).toString());
 	} else {
-	    System.out.println("Not found " + id);
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Not found " + id);
 	}
 
 	// Return Vehicle's ID if found
@@ -363,7 +363,6 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	    // Display Vehicles by year
 	    case 2: {
-
 		displayVechiclesByYear();
 		break;
 	    }
@@ -377,8 +376,13 @@ public class VehicleList extends ArrayList<Vehicle> {
      * Display all Vehicles without any condition
      */
     private void displayVehiclesNoCondition() {
+	// If list is empty, then output a notification to console
+	if (this.isEmpty()) {
+	    Constants.DRAWING_LINE_ONE_MESSAGE(Constants.EMPTY_VALUE_MSG);
+	}
+
 	for (Vehicle vehicle : this) {
-	    System.out.println(vehicle.toString());
+	    Constants.DRAWING_LINE_ONE_MESSAGE(vehicle.toString());
 	}
     }
 
@@ -416,12 +420,12 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	// Print out the matches
 	for (Vehicle vehicle : matches) {
-	    System.out.println(vehicle.toString());
+	    Constants.DRAWING_LINE_ONE_MESSAGE(vehicle.toString());
 	}
 
 	// If not found, output the message
 	if (matches.isEmpty()) {
-	    System.out.println(Constants.EMPTY_VALUE_MSG);
+	    Constants.DRAWING_LINE_ONE_MESSAGE(Constants.EMPTY_VALUE_MSG);
 	}
     }
 
@@ -450,9 +454,9 @@ public class VehicleList extends ArrayList<Vehicle> {
 	// Delete the vehicle
 	if (foundVehicleIndex != -1 && isConfirmToDelete) {
 	    this.remove(foundVehicleIndex);
-	    System.out.println("Confirmed to delete Successfully.");
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Confirmed to delete Successfully.");
 	} else {
-	    System.out.println("Confirmed not to delete.");
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Cancel delete a vehicle.");
 	}
     }
 
@@ -463,6 +467,7 @@ public class VehicleList extends ArrayList<Vehicle> {
      * Searching Vehicles By Multiple options
      */
     public void searchVehicles() {
+
 	// Get option of searching vehicles
 	byte option = (byte) Menu.getChoiceInt(
 		"Search By Id",
@@ -531,7 +536,12 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	// Printout the list of matching names
 	for (Vehicle vehicle : matches) {
-	    System.out.println(vehicle.toString());
+	    Constants.DRAWING_LINE_ONE_MESSAGE(vehicle.toString());
+	}
+
+	// If nothing found, print a message to console
+	if (matches.isEmpty()) {
+	    Constants.DRAWING_LINE_ONE_MESSAGE(Constants.EMPTY_VALUE_MSG);
 	}
     }
 
@@ -539,6 +549,9 @@ public class VehicleList extends ArrayList<Vehicle> {
      * Search Vehicles By Date in Range
      */
     public void searchVehicleByDateInRange() {
+
+	boolean isFound = false;
+
 	// Input min date
 	// - If user enter the date, then precheck it through the readDate function
 	Date minDate = Utilities.readDate("Enter Min Date",
@@ -563,8 +576,14 @@ public class VehicleList extends ArrayList<Vehicle> {
 	for (Vehicle vehicle : this) {
 	    if ((vehicle.getProductDate().after(minDate) || vehicle.getProductDate().equals(minDate))
 		    && (vehicle.getProductDate().before(maxDate) || vehicle.getProductDate().equals(maxDate))) {
-		System.out.println(vehicle.toString());
+		Constants.DRAWING_LINE_ONE_MESSAGE(vehicle.toString());
+		isFound = true;
 	    }
+	}
+
+	// If nothing found, print a message to console
+	if (!isFound) {
+	    Constants.DRAWING_LINE_ONE_MESSAGE(Constants.EMPTY_VALUE_MSG);
 	}
     }
 
@@ -623,7 +642,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	    // Exit and printout if file is not 
 	    System.err.println(ex);
-	    System.out.println("File not found. Please try again.");
+	    Constants.DRAWING_LINE_ONE_MESSAGE("File not found. Please try again.");
 
 	} catch (IOException ex) {
 
