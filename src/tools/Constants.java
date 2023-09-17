@@ -4,44 +4,64 @@
  */
 package tools;
 
-/** The file contains Constants Variables of the Application
+/**
+ * The file contains Constants Variables of the Application
  *
  * @author duyvu
  */
 public abstract class Constants {
 
-    // Date
+    // ==================================
+    // == DATE GROUP
+    // ==================================
     public static final String DATE_DELIMITER = "-";
     public static final String DATE_FORMAT = "dd-MM-yyyy";
 
+    // ==================================
+    // == MESSAGE GROUP
+    // ==================================
+    // Empty Messaage
+    public static final String EMPTY_VALUE_MSG = "No values found. Please try again";
+
     // Invalid Message
     public static final String INVALID_MSG(String subject) {
-        return "Invalid " + subject + ". Please try again.";
+	return "Invalid " + subject + ". Please try again.";
     }
 
     // Duplicated Message
     public static final String DUPLICATED_MSG(String subject) {
-        return "Duplicated " + subject + ". Please try again.";
+	return "Duplicated " + subject + ". Please try again.";
     }
 
     // In format and specific Condition Message
     public static final String MUST_IN_CONDITIONS_MSG(String subject,
-                                                      String... conditions) {
+	    String... conditions) {
 
-        String str = subject + " has to follow those conditions: ";
-        int L = conditions.length;
+	String str = subject + " has to follow those conditions: ";
+	int L = conditions.length;
 
-        for (int i = 0; i < L; i++) {
-            str = str.concat("\n\t- " + conditions[i] + ".");
-        }
+	for (int i = 0; i < L; i++) {
+	    str = str.concat("\n\t- " + conditions[i] + ".");
+	}
 
-        // If there is no condition, then return ""
-        return L > 0 ? str : "";
+	// If there is no condition, then return ""
+	return L > 0 ? str : "";
     }
 
     // Default Value Message
     public static final String DEFAULT_VALUE_MSG(String subject,
-                                                 String value) {
-        return "If undefined, value of " + subject + " will be set to " + value + ".";
+	    String value) {
+	return "If undefined, value of " + subject + " will be set to " + value + ".";
+    }
+
+    // ==================================
+    // == OUTPUT DRAWING GROUP
+    // ==================================
+    public static final void DRAWING_TABLE_EDGE_LINE_SMALL() {
+	System.out.printf("\t\t+-----------------------+%n");
+    }
+
+    public static final void DRAWING_TABLE_EDGE_LINE_LARGE() {
+	System.out.printf("\t\t+----------------------------------------------+%n");
     }
 }
