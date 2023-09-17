@@ -276,6 +276,9 @@ public class VehicleList extends ArrayList<Vehicle> {
 		// If user do not enter anything, then return the default date at 01-01-1970
 		vehicle.setProductDate(productDate);
 	    }
+
+	    // Printout the Vehicle after updating successfully
+	    System.out.println("Updating Successfully. New updated value: " + vehicle.toString());
 	}
     }
 
@@ -401,7 +404,34 @@ public class VehicleList extends ArrayList<Vehicle> {
 	}
     }
 
-    // TODO: Remove
+    // ==================================
+    // == REMOVE GROUP
+    // ==================================
+    public void removeVehicle() {
+	// Find ID and extract the Vehicle on that ID
+	int foundVehicleIndex = checkVehicleExistOnId();
+
+	// If not found than return nothing
+	if (foundVehicleIndex == -1) {
+	    return;
+	}
+
+	// Preprompting againt for deletion
+	String[] invalidBooleanMsg = new String[]{
+	    Constants.MUST_IN_CONDITIONS_MSG("Continue",
+	    "Only accept boolean value (1, 0, f, t, true, false)")};
+
+	boolean isConfirmToDelete = Utilities.readBoolean("Are you sure to delete this vehicle? (Y/N)", invalidBooleanMsg);
+
+	// Delete the vehicle
+	if (foundVehicleIndex != -1 && isConfirmToDelete) {
+	    this.remove(foundVehicleIndex);
+	    System.out.println("Confirmed to delete Successfully.");
+	} else {
+	    System.out.println("Confirmed not to delete.");
+	}
+    }
+
     // TODO: search. Denote that do not precheck the String for searching
     // TODO: saves all vehicles to file
 }

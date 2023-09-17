@@ -23,7 +23,8 @@ public class VehicleManagement {
 	do {
 
 	    // Generate the Menu options
-	    userChoice = Menu.getChoiceInt("Add new Vehicle",
+	    userChoice = Menu.getChoiceInt(
+		    "Add new Vehicle",
 		    "Check Vehicle's existance",
 		    "Update Vehicle",
 		    "Delete Vehicle",
@@ -54,7 +55,10 @@ public class VehicleManagement {
 		    list.updateVehicle();
 		    break;
 		}
+
+		// Remove Vehicle on ID
 		case 4: {
+		    list.removeVehicle();
 		    break;
 		}
 		case 5: {
@@ -77,7 +81,7 @@ public class VehicleManagement {
 		}
 		default: {
 		    // Asking the user to continue the program
-		    isExitedProgram = Utilities.readBoolean("Are you sure that you want to exit the program (Y/N)?",
+		    isExitedProgram = Utilities.readBoolean("Are you sure to EXIT the program (Y/N)?",
 			    new String[]{Constants.INVALID_MSG("Exit the program"),
 				Constants.MUST_IN_CONDITIONS_MSG("Exit the program's value",
 					"Accept only (Y,1,true/N,0,false) value")});
