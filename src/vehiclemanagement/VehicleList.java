@@ -11,14 +11,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -169,9 +166,9 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	// Print out message if add failed
 	if (this.add(newVehicle)) {
-	    System.out.println("Added successfully. New vehicle: " + newVehicle.toString());
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Added successfully. New vehicle: " + newVehicle.toString());
 	} else {
-	    System.out.println("Added failed. Please try again.");
+	    Constants.DRAWING_LINE_ONE_MESSAGE("Added failed. Please try again.");
 	}
     }
 
@@ -651,7 +648,7 @@ public class VehicleList extends ArrayList<Vehicle> {
      * <br>With the mode isOverride, the file will be save to the original file if turning
      * <br>on or save at new file, same location if turning off
      *
-     * @param filename: a file is saved from the program
+     * @param fileName: a file is saved from the program
      */
     public void saveVehiclesFromFile(String fileName) {
 
@@ -671,7 +668,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 
 	    // Iterating the list and send the the writer stream
 	    for (Vehicle vehicle : this) {
-		printWriter.write(vehicle.toString());
+		printWriter.println(vehicle.toString());
 	    }
 
 	    // Print sucessful messages

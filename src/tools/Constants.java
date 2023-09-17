@@ -63,9 +63,9 @@ public abstract class Constants {
     // == OUTPUT DRAWING GROUP
     // ==================================
     public static final void DRAWING_LINE_ONE_MESSAGE(String prompt) {
-	System.out.println("\n\t\t=========================");
+	System.out.println("\n\t\t+==============================================+");
 	System.out.print("\t\t" + prompt);
-	System.out.println("\n\t\t=========================");
+	System.out.println("\n\t\t+==============================================+");
     }
 
     public static final void DRAWING_TABLE_EDGE_LINE() {
