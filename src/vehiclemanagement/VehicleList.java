@@ -96,7 +96,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Type",
 			    "No special characters",
 			    "Contains only alphabet characters and space"),
-		    Constants.DEFAULT_VALUE_MSG("Vehicle's Type", "null")},
+		    Constants.DEFAULT_VALUE_MSG("Vehicle's Type", "NULL")},
 		"^[a-zA-Z ]+$",
 		true);
 	type = type.isEmpty() ? "NULL" : type;
@@ -107,7 +107,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Color",
 			    "No special characters",
 			    "Contains only alphabet characters and space"),
-		    Constants.DEFAULT_VALUE_MSG("Vehicle's Color", "null")},
+		    Constants.DEFAULT_VALUE_MSG("Vehicle's Color", "NULL")},
 		"^[a-zA-Z ]+$",
 		true);
 	color = color.isEmpty() ? "NULL" : color;
@@ -118,7 +118,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Brand",
 			    "No special characters",
 			    "Contains only alphabet characters and space"),
-		    Constants.DEFAULT_VALUE_MSG("Vehicle's Brand", "null")},
+		    Constants.DEFAULT_VALUE_MSG("Vehicle's Brand", "NULL")},
 		"^[a-zA-Z ]+$",
 		true);
 	brand = brand.isEmpty() ? "NULL" : brand;
@@ -156,6 +156,13 @@ public class VehicleList extends ArrayList<Vehicle> {
     // ==================================
     // == UPDATE GROUP 
     // ==================================
+//     String id;
+//    String name;
+//    String color;
+//    double price;
+//    String brand;
+//    String type;
+//    Date productDate;
     public void updateVehicle() {
 	// Find ID and extract the Vehicle on that ID
 	int foundVehicleIndex = checkVehicleExistOnId();
@@ -164,7 +171,69 @@ public class VehicleList extends ArrayList<Vehicle> {
 	// Get the founded Vehicle and update the information
 	if (foundVehicleIndex != -1) {
 	    vehicle = this.get(foundVehicleIndex);
-	    System.out.println(vehicle.toString());
+
+//	    // Input Name
+//	    name = Utilities.readString("Enter Vehicle's Name",
+//		    new String[]{Constants.INVALID_MSG("Vehicle's Name"),
+//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Name",
+//				"Name must be between 8 to 30 characters",
+//				"No special characters",
+//				"Cannot be null",
+//				"Contains only alphabets, numeric characters and space")},
+//		    "^[a-zA-Z0-9 ]{8,30}$",
+//		    false);
+//
+//	    // Input Type
+//	    type = Utilities.readString("Enter Vehicle's Type",
+//		    new String[]{Constants.INVALID_MSG("Vehicle's Type"),
+//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Type",
+//				"No special characters",
+//				"Contains only alphabet characters and space"),
+//			Constants.DEFAULT_VALUE_MSG("Vehicle's Type", "null")},
+//		    "^[a-zA-Z ]+$",
+//		    true);
+//	    type = type.isEmpty() ? "NULL" : type;
+//
+//	    // Input Color
+//	    color = Utilities.readString("Enter Vehicle's Color",
+//		    new String[]{Constants.INVALID_MSG("Vehicle's Color"),
+//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Color",
+//				"No special characters",
+//				"Contains only alphabet characters and space"),
+//			Constants.DEFAULT_VALUE_MSG("Vehicle's Color", "null")},
+//		    "^[a-zA-Z ]+$",
+//		    true);
+//	    color = color.isEmpty() ? "NULL" : color;
+//
+//	    // Input Brand
+//	    brand = Utilities.readString("Enter Vehicle's Brand",
+//		    new String[]{Constants.INVALID_MSG("Vehicle's Brand"),
+//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Brand",
+//				"No special characters",
+//				"Contains only alphabet characters and space"),
+//			Constants.DEFAULT_VALUE_MSG("Vehicle's Brand", "null")},
+//		    "^[a-zA-Z ]+$",
+//		    true);
+//	    brand = brand.isEmpty() ? "NULL" : brand;
+//
+//	    // Input price
+//	    price = Double.parseDouble(Utilities.readString("Enter Vehicle's Price",
+//		    new String[]{Constants.INVALID_MSG("Vehicle's Price"),
+//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Price",
+//				"Decimal Seperator must be '.' (e.g. 123.123)",
+//				"Price must be greater than or equal to 0",
+//				"No special characters",
+//				"Have to be numeric type")},
+//		    "^\\d+\\.?\\d*$",
+//		    false));
+//
+//	    // Input year
+//	    productDate = Utilities.readDate("Enter Vehicle's Date",
+//		    new String[]{Constants.INVALID_MSG("Vehicle's Price"),
+//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Date",
+//				"Date must be in format dd-MM-yyyy",
+//				"No special characters")},
+//		    "dd-MM-yyyy");
 	}
     }
 
@@ -207,6 +276,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 	int foundVehicleIndex = checkVehiclekExist(vehicle);
 	if (foundVehicleIndex != -1) {
 	    System.out.println("The vehicle " + id + " founded at index " + foundVehicleIndex);
+	    System.out.println("Vehicle: " + this.get(foundVehicleIndex).toString());
 	} else {
 	    System.out.println("Not found " + id);
 	}

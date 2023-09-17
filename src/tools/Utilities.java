@@ -298,21 +298,21 @@ public abstract class Utilities {
      * @param invalidMsgs:invalid messages for specific input type
      * @param strFormat: regular expression to match the string format
      * @param isSkippable: determine if the user skip the input and return null to set a default value
-     * @return the date before the given date
+     * @return null value if skippable or a new value
      */
     public static String readString(String prompt,
 	    String[] invalidMsgs,
 	    String strFormat,
 	    boolean isSkippable) {
 
-	String inputStr = "";
+	String inputStr = null;
 	boolean isMatched = false;
 	do {
 	    System.out.print("\n" + prompt + ": ");
 	    inputStr = sc.nextLine().trim();
 
 	    // Return null if the string is empty to set default value
-	    if (inputStr.isEmpty() && isSkippable) {
+	    if (inputStr.isBlank() && isSkippable) {
 		break;
 	    }
 
