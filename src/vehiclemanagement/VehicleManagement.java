@@ -39,7 +39,7 @@ public class VehicleManagement {
 
 		    // Ask user to continue adding to the list
 		    Menu.continueOption(() -> list.addVehicle(),
-			    "Do you want to continue adding new vehicle (Y/N)");
+			    "Do you want to continue ADDING new vehicle (Y/N)");
 		    break;
 		}
 
@@ -66,7 +66,7 @@ public class VehicleManagement {
 
 		    // Ask user to continue adding to the list
 		    Menu.continueOption(() -> list.displayVehicles(),
-			    "Do you want to continue displaying vehicles (Y/N)");
+			    "Do you want to continue DISPLAYING vehicles (Y/N)");
 		    break;
 		}
 		case 7: {

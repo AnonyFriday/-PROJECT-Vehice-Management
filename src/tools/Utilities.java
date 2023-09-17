@@ -132,7 +132,7 @@ public abstract class Utilities {
 	try {
 	    return formatter.parse(inputStr);
 	} catch (ParseException ex) {
-	    System.out.println(ex);
+	    System.err.println(ex);
 	}
 	return null; // Return error if parsing date unsuccessful
     }
@@ -192,11 +192,14 @@ public abstract class Utilities {
      * @param prompt: will be printted before inputting
      * @param invalidMsgs: output messages to console incase of invalid input
      * @param dateFormat: input a date format
+     * @param isSkippable: return null immediately if user donot enter any values
      * @return a date object based on the input string
      */
     public static Date readDate(String prompt,
 	    String[] invalidMsgs,
-	    String dateFormat) {
+	    String dateFormat,
+	    boolean isSkippable) {
+
 	Date date = null;
 	String inputStr;
 	do {
@@ -206,10 +209,17 @@ public abstract class Utilities {
 	    // Assign the date object created from the parsing function 
 	    date = parseDateFromString(inputStr, dateFormat);
 
+	    // If skippable is enabled and date == null, then break the loop immediately
+	    if (date == null && isSkippable) {
+		break;
+	    }
+
 	    // Output the msg if the date is valid
-	    if (date == null && invalidMsgs.length > 0) {
-		for (String message : invalidMsgs) {
-		    System.out.println(message);
+	    {
+		if (date == null && invalidMsgs.length > 0) {
+		    for (String message : invalidMsgs) {
+			System.out.println(message);
+		    }
 		}
 	    }
 	} while (date == null);
@@ -311,7 +321,7 @@ public abstract class Utilities {
 	    System.out.print("\n" + prompt + ": ");
 	    inputStr = sc.nextLine().trim();
 
-	    // Return null if the string is empty to set default value
+	    // Break the loop immediately if the skippable is enable and user enter empty character
 	    if (inputStr.isBlank() && isSkippable) {
 		break;
 	    }

@@ -19,13 +19,6 @@ import tools.Utilities;
  */
 public class VehicleList extends ArrayList<Vehicle> {
 
-    // Reading Scanner from Keyboard
-    private static final Scanner sc;
-
-    static {
-	sc = new Scanner(System.in);
-    }
-
 //    Comparator<Vehicle> cNameDesc = new Comparator<Vehicle>() {
 //        @Override
 //        public int compare(Vehicle o1,
@@ -53,12 +46,13 @@ public class VehicleList extends ArrayList<Vehicle> {
      * <br>Ask user to continue
      */
     public void addVehicle() {
-	String name, color, brand, type, id;
-	double price;
+	String name, color, brand, type, id, priceStr;
 	Date productDate;
 	int foundVehicleIndex = -1;
 
 	// Input id and precheck its existance or not
+	// - Does not allow null value
+	// - If user enter the id, then precheck it through the readString function for its existence
 	do {
 	    id = Utilities.readString("Enter Vehicle's ID",
 		    new String[]{Constants.INVALID_MSG("Vehicle's Id"),
@@ -80,6 +74,8 @@ public class VehicleList extends ArrayList<Vehicle> {
 	} while (foundVehicleIndex != -1);
 
 	// Input Name
+	// - Does not allow null value since making no sense if storing unknown vehicle
+	// - If user enter the name, then precheck it through the readString function
 	name = Utilities.readString("Enter Vehicle's Name",
 		new String[]{Constants.INVALID_MSG("Vehicle's Name"),
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Name",
@@ -91,7 +87,9 @@ public class VehicleList extends ArrayList<Vehicle> {
 		false);
 
 	// Input Type
-	type = Utilities.readString("Enter Vehicle's Type",
+	// - If user enter nothing, than assign NULL as the default character
+	// - If user enter the type, then precheck it through the readString function
+	type = Utilities.readString("Enter Vehicle's Type (Default is NULL)",
 		new String[]{Constants.INVALID_MSG("Vehicle's Type"),
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Type",
 			    "No special characters",
@@ -102,7 +100,9 @@ public class VehicleList extends ArrayList<Vehicle> {
 	type = type.isEmpty() ? "NULL" : type;
 
 	// Input Color
-	color = Utilities.readString("Enter Vehicle's Color",
+	// - If user enter nothing, than assign NULL as the default character
+	// - If user enter the color, then precheck it through the readString function
+	color = Utilities.readString("Enter Vehicle's Color (Default is NULL)",
 		new String[]{Constants.INVALID_MSG("Vehicle's Color"),
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Color",
 			    "No special characters",
@@ -113,7 +113,9 @@ public class VehicleList extends ArrayList<Vehicle> {
 	color = color.isEmpty() ? "NULL" : color;
 
 	// Input Brand
-	brand = Utilities.readString("Enter Vehicle's Brand",
+	// - If user enter nothing, than assign NULL as the default character
+	// - If user enter the brand, then precheck it through the readString function
+	brand = Utilities.readString("Enter Vehicle's Brand (Default is NULL)",
 		new String[]{Constants.INVALID_MSG("Vehicle's Brand"),
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Brand",
 			    "No special characters",
@@ -124,26 +126,39 @@ public class VehicleList extends ArrayList<Vehicle> {
 	brand = brand.isEmpty() ? "NULL" : brand;
 
 	// Input price
-	price = Double.parseDouble(Utilities.readString("Enter Vehicle's Price",
+	// - If user enter nothing, than assign 0 as the default character
+	// - If user enter the price, then precheck it through the readString function
+	priceStr = Utilities.readString("Enter Vehicle's Price (Default is 0)",
 		new String[]{Constants.INVALID_MSG("Vehicle's Price"),
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Price",
 			    "Decimal Seperator must be '.' (e.g. 123.123)",
 			    "Price must be greater than or equal to 0",
 			    "No special characters",
-			    "Have to be numeric type")},
+			    "Have to be numeric type"),
+		    Constants.DEFAULT_VALUE_MSG("Vehicle's Price", "0.0")},
 		"^\\d+\\.?\\d*$",
-		false));
+		true);
+	priceStr = priceStr.isEmpty() ? "0.0" : priceStr;
 
-	// Input year
-	productDate = Utilities.readDate("Enter Vehicle's Date",
+	// Input date
+	// - If user enter nothing, than assign 01-01-1970 as the default value
+	// - If user enter the date, then precheck it through the readDate function
+	productDate = Utilities.readDate("Enter Vehicle's Date (Default is 01-01-1970)",
 		new String[]{Constants.INVALID_MSG("Vehicle's Price"),
 		    Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Date",
 			    "Date must be in format dd-MM-yyyy",
-			    "No special characters")},
-		"dd-MM-yyyy");
+			    "No special characters"),
+		    Constants.DEFAULT_VALUE_MSG("Vehicle's Date", "01-01-1970")},
+		"dd-MM-yyyy",
+		true);
+
+	if (productDate == null) {
+	    // If user do not enter anything, then return the default date at 01-01-1970
+	    productDate = Utilities.parseDateFromString("01-01-1970", Constants.DATE_FORMAT);
+	}
 
 	// Adding new vehicle to the list
-	Vehicle newVehicle = new Vehicle(id, name, color, price, brand, type, productDate);
+	Vehicle newVehicle = new Vehicle(id, name, color, Double.parseDouble(priceStr), brand, type, productDate);
 
 	// Print out message if add failed
 	if (this.add(newVehicle)) {
@@ -156,84 +171,111 @@ public class VehicleList extends ArrayList<Vehicle> {
     // ==================================
     // == UPDATE GROUP 
     // ==================================
-//     String id;
-//    String name;
-//    String color;
-//    double price;
-//    String brand;
-//    String type;
-//    Date productDate;
     public void updateVehicle() {
 	// Find ID and extract the Vehicle on that ID
 	int foundVehicleIndex = checkVehicleExistOnId();
 	Vehicle vehicle = null;
+	String name, color, brand, type, id, priceStr;
+	Date productDate;
 
 	// Get the founded Vehicle and update the information
 	if (foundVehicleIndex != -1) {
+
 	    vehicle = this.get(foundVehicleIndex);
 
-//	    // Input Name
-//	    name = Utilities.readString("Enter Vehicle's Name",
-//		    new String[]{Constants.INVALID_MSG("Vehicle's Name"),
-//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Name",
-//				"Name must be between 8 to 30 characters",
-//				"No special characters",
-//				"Cannot be null",
-//				"Contains only alphabets, numeric characters and space")},
-//		    "^[a-zA-Z0-9 ]{8,30}$",
-//		    false);
-//
-//	    // Input Type
-//	    type = Utilities.readString("Enter Vehicle's Type",
-//		    new String[]{Constants.INVALID_MSG("Vehicle's Type"),
-//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Type",
-//				"No special characters",
-//				"Contains only alphabet characters and space"),
-//			Constants.DEFAULT_VALUE_MSG("Vehicle's Type", "null")},
-//		    "^[a-zA-Z ]+$",
-//		    true);
-//	    type = type.isEmpty() ? "NULL" : type;
-//
-//	    // Input Color
-//	    color = Utilities.readString("Enter Vehicle's Color",
-//		    new String[]{Constants.INVALID_MSG("Vehicle's Color"),
-//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Color",
-//				"No special characters",
-//				"Contains only alphabet characters and space"),
-//			Constants.DEFAULT_VALUE_MSG("Vehicle's Color", "null")},
-//		    "^[a-zA-Z ]+$",
-//		    true);
-//	    color = color.isEmpty() ? "NULL" : color;
-//
-//	    // Input Brand
-//	    brand = Utilities.readString("Enter Vehicle's Brand",
-//		    new String[]{Constants.INVALID_MSG("Vehicle's Brand"),
-//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Brand",
-//				"No special characters",
-//				"Contains only alphabet characters and space"),
-//			Constants.DEFAULT_VALUE_MSG("Vehicle's Brand", "null")},
-//		    "^[a-zA-Z ]+$",
-//		    true);
-//	    brand = brand.isEmpty() ? "NULL" : brand;
-//
-//	    // Input price
-//	    price = Double.parseDouble(Utilities.readString("Enter Vehicle's Price",
-//		    new String[]{Constants.INVALID_MSG("Vehicle's Price"),
-//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Price",
-//				"Decimal Seperator must be '.' (e.g. 123.123)",
-//				"Price must be greater than or equal to 0",
-//				"No special characters",
-//				"Have to be numeric type")},
-//		    "^\\d+\\.?\\d*$",
-//		    false));
-//
-//	    // Input year
-//	    productDate = Utilities.readDate("Enter Vehicle's Date",
-//		    new String[]{Constants.INVALID_MSG("Vehicle's Price"),
-//			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Date",
-//				"Date must be in format dd-MM-yyyy",
-//				"No special characters")},
-//		    "dd-MM-yyyy");
+	    // Modify Name
+	    // - If user enter nothing, than preserve the old value
+	    // - If user enter the name, then precheck it through the readString function
+	    name = Utilities.readString("Update Vehicle's Name (Enter to unchange)",
+		    new String[]{Constants.INVALID_MSG("Vehicle's Name"),
+			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Name",
+				"Name must be between 8 to 30 characters",
+				"No special characters",
+				"Cannot be null",
+				"Contains only alphabets, numeric characters and space")},
+		    "^[a-zA-Z0-9 ]{8,30}$",
+		    true);
+	    if (!name.isEmpty()) {
+		vehicle.setName(name);
+	    }
+
+	    // Modify Type
+	    // - If user enter nothing, than preserve the old value
+	    // - If user enter the type, then precheck it through the readString function
+	    type = Utilities.readString("Update Vehicle's Type (Enter to unchange)",
+		    new String[]{Constants.INVALID_MSG("Vehicle's Type"),
+			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Type",
+				"No special characters",
+				"Contains only alphabet characters and space"),
+			Constants.DEFAULT_VALUE_MSG("Vehicle's Type", "null")},
+		    "^[a-zA-Z ]+$",
+		    true);
+	    if (!type.isEmpty()) {
+		vehicle.setType(type);
+	    }
+
+	    // Modify Color
+	    // - If user enter nothing, than preserve the old value
+	    // - If user enter the color, then precheck it through the readString function
+	    color = Utilities.readString("Update Vehicle's Color (Enter to unchange)",
+		    new String[]{Constants.INVALID_MSG("Vehicle's Color"),
+			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Color",
+				"No special characters",
+				"Contains only alphabet characters and space"),
+			Constants.DEFAULT_VALUE_MSG("Vehicle's Color", "null")},
+		    "^[a-zA-Z ]+$",
+		    true);
+	    if (!color.isEmpty()) {
+		vehicle.setColor(color);
+	    }
+
+	    // Modify Brand
+	    // - If user enter nothing, than preserve the old value
+	    // - If user enter the brand, then precheck it through the readString function
+	    brand = Utilities.readString("Update Vehicle's Brand (Enter to unchange)",
+		    new String[]{Constants.INVALID_MSG("Vehicle's Brand"),
+			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Brand",
+				"No special characters",
+				"Contains only alphabet characters and space"),
+			Constants.DEFAULT_VALUE_MSG("Vehicle's Brand", "null")},
+		    "^[a-zA-Z ]+$",
+		    true);
+	    if (!brand.isEmpty()) {
+		vehicle.setBrand(brand);
+	    }
+
+	    // Modify price
+	    // - If user enter nothing, than preserve the old value
+	    // - If user enter the price, then precheck it through the readString function
+	    priceStr = Utilities.readString("Update Vehicle's Price (Enter to unchange)",
+		    new String[]{Constants.INVALID_MSG("Vehicle's Price"),
+			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Price",
+				"Decimal Seperator must be '.' (e.g. 123.123)",
+				"Price must be greater than or equal to 0",
+				"No special characters",
+				"Have to be numeric type")},
+		    "^\\d+\\.?\\d*$",
+		    true);
+	    if (!priceStr.isEmpty()) {
+		vehicle.setPrice(Double.parseDouble(priceStr));
+	    }
+
+	    // Modify year
+	    // - If user enter nothing, than preserve the old value
+	    // - If user enter the date, then precheck it through the readDate function
+	    productDate = Utilities.readDate("Update Vehicle's Date (Enter to unchange)",
+		    new String[]{Constants.INVALID_MSG("Vehicle's Price"),
+			Constants.MUST_IN_CONDITIONS_MSG("Vehicle's Date",
+				"Date must be in format dd-MM-yyyy",
+				"No special characters"),
+			Constants.DEFAULT_VALUE_MSG("Vehicle's Date", "01-01-1970")},
+		    "dd-MM-yyyy",
+		    true);
+
+	    if (!(productDate == null)) {
+		// If user do not enter anything, then return the default date at 01-01-1970
+		vehicle.setProductDate(productDate);
+	    }
 	}
     }
 
@@ -359,7 +401,6 @@ public class VehicleList extends ArrayList<Vehicle> {
 	}
     }
 
-    // TODO: Update
     // TODO: Remove
     // TODO: search. Denote that do not precheck the String for searching
     // TODO: saves all vehicles to file
