@@ -21,6 +21,9 @@ public class VehicleManagement {
 	int userChoice;
 	boolean isExitedProgram = false;
 
+	// Load file at first for the application
+	list.loadVehiclesFromFile(Constants.FILENAME);
+
 	do {
 	    // Generate the Menu options
 	    userChoice = Menu.getChoiceInt(
@@ -30,8 +33,7 @@ public class VehicleManagement {
 		    "Delete Vehicle",
 		    "Search Vehicle",
 		    "Display all Vehicles",
-		    "Save all Vehicles to a file",
-		    "Load all Vehicles from a file");
+		    "Save all Vehicles to a file");
 
 	    switch (userChoice) {
 		// Adding Vehicle
@@ -81,10 +83,6 @@ public class VehicleManagement {
 		}
 		case 7: {
 		    list.saveVehiclesFromFile(Constants.FILENAME);
-		    break;
-		}
-		case 8: {
-		    list.loadVehiclesFromFile(Constants.FILENAME);
 		    break;
 		}
 		default: {
