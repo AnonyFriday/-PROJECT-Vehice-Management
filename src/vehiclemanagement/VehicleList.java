@@ -351,7 +351,7 @@ public class VehicleList extends ArrayList<Vehicle> {
     public void displayVehicles() {
 
 	// Get option of displaying vehicles
-	byte option = (byte) Menu.getChoiceInt("Display all Vehicles", "Display all Vehicles on Year");
+	byte option = (byte) Menu.getChoiceInt("Display all Vehicles", "Display all Vehicles on Year", "Display all Vehicles on Price");
 
 	switch (option) {
 
@@ -367,6 +367,7 @@ public class VehicleList extends ArrayList<Vehicle> {
 		break;
 	    }
 	    default: {
+		displayVehiclesByPrice();
 		break;
 	    }
 	}
@@ -416,6 +417,45 @@ public class VehicleList extends ArrayList<Vehicle> {
 	    int o1_year = Utilities.getDatePart(o1.getProductDate(), Calendar.YEAR);
 	    int o2_year = Utilities.getDatePart(o2.getProductDate(), Calendar.YEAR);
 	    return o2_year - o1_year;
+	});
+
+	// Print out the matches
+	for (Vehicle vehicle : matches) {
+	    Constants.DRAWING_LINE_ONE_MESSAGE(vehicle.toString());
+	}
+
+	// If not found, output the message
+	if (matches.isEmpty()) {
+	    Constants.DRAWING_LINE_ONE_MESSAGE(Constants.EMPTY_VALUE_MSG);
+	}
+    }
+
+    /**
+     * Display all Vehicles by price less than inputted price
+     *
+     */
+    private void displayVehiclesByPrice() {
+	// Enter the production year of the vehicle
+	double price = Double.parseDouble(Utilities.readString("Enter the price to search",
+		new String[]{"Only accept numeric value"},
+		"^\\d+\\.?\\d*$",
+		false));
+
+	// Iterating and find vehicles machtching names
+	List<Vehicle> matches = new ArrayList<>();
+	for (Vehicle vehicle : this) {
+
+	    // Add matched vehicles
+	    if (vehicle.getPrice() <= price) {
+		matches.add(vehicle);
+	    }
+	}
+
+	// Sorting matched vehicles field decensdingly by year
+	Collections.sort(matches, (Vehicle o1, Vehicle o2) -> {
+	    double o1_price = o1.getPrice();
+	    double o2_price = o2.getPrice();
+	    return Double.compare(o2_price, o1_price);
 	});
 
 	// Print out the matches

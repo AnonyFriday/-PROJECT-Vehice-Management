@@ -21,18 +21,6 @@ public class VehicleManagement {
 	int userChoice;
 	boolean isExitedProgram = false;
 
-//	// Loading resources from file first before using the program
-//	Thread loadResourcesThread = new Thread(() -> {
-//	    list.loadVehiclesFromFile(Constants.FILENAME);
-//	});
-//	loadResourcesThread.start();
-//
-//	// Main thread waiting for the Loading Resource Thread terminates
-//	try {
-//	    loadResourcesThread.join();
-//	} catch (InterruptedException ex) {
-//	    Logger.getLogger(VehicleManagement.class.getName()).log(Level.SEVERE, null, ex);
-//	}
 	do {
 	    // Generate the Menu options
 	    userChoice = Menu.getChoiceInt(
