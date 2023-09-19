@@ -652,27 +652,29 @@ public class VehicleList extends ArrayList<Vehicle> {
 	try {
 	    fileReader = new FileReader(new File(filename));
 	    bufferReader = new BufferedReader(fileReader);
-	    String line = bufferReader.readLine();
+	    String line;
 
 	    // Iterating each line of file to extract format
-	    while (line != null) {
-		// Line format: id,name,color,price,brand,type,productDate
-		StringTokenizer str = new StringTokenizer(line, ",");
+	    while ((line = bufferReader.readLine()) != null) {
 
-		// Adding those token into Vehicle's attributes
-		String id = str.nextToken().trim();
-		String name = str.nextToken().trim();
-		String color = str.nextToken().trim();
-		double price = Double.parseDouble(str.nextToken().trim());
-		String brand = str.nextToken().trim();
-		String type = str.nextToken().trim();
-		Date productDate = Utilities.parseDateFromString(str.nextToken().trim(), Constants.DATE_FORMAT);
+		// Prevent the empty line
+		line = line.trim();
+		if (!line.isEmpty()) {
+		    // Line format: id,name,color,price,brand,type,productDate
+		    StringTokenizer str = new StringTokenizer(line, ",");
 
-		// Adding to the list
-		this.add(new Vehicle(id, name, color, price, brand, type, productDate));
+		    // Adding those token into Vehicle's attributes
+		    String id = str.nextToken().trim();
+		    String name = str.nextToken().trim();
+		    String color = str.nextToken().trim();
+		    double price = Double.parseDouble(str.nextToken().trim());
+		    String brand = str.nextToken().trim();
+		    String type = str.nextToken().trim();
+		    Date productDate = Utilities.parseDateFromString(str.nextToken().trim(), Constants.DATE_FORMAT);
 
-		// Next line
-		line = bufferReader.readLine();
+		    // Adding to the list
+		    this.add(new Vehicle(id, name, color, price, brand, type, productDate));
+		}
 	    }
 
 	    // Print sucessful messages
